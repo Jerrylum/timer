@@ -25,7 +25,7 @@ body {
     /* line-height: 240px; */
     display: block;
     position: absolute;
-    right: 64px;
+    right: 50px;
 }
 
 #timer-value span {
@@ -43,8 +43,7 @@ body {
     font-size: 100px;
     display: block;
     position: absolute;
-    transform: translate(-50%, 0%);
-    right: -13px;
+    right: 60px;
     top: 185px;
 }
 
@@ -68,7 +67,7 @@ body {
     height: 90px;
 }
 
-#timer-btn > * {
+#timer-btn>* {
     font-size: 45px;
     font-weight: bolder;
     border-radius: 16px;
@@ -85,4 +84,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.disabled {
+    background-color: gray !important;
 }
