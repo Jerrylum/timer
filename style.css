@@ -1,0 +1,88 @@
+body {
+    background-color: black;
+    color: white !important;
+}
+
+#timer {
+    width: 900px;
+    height: 400px;
+}
+
+#timer-content {
+    width: 900px;
+    height: 440px;
+    font-family: Arial;
+}
+
+#timer-body {
+    /* margin-top: 40px; */
+    height: 270px;
+    margin-bottom: 50px;
+}
+
+#timer-value {
+    font-size: 200px;
+    /* line-height: 240px; */
+    display: block;
+    position: absolute;
+    right: 64px;
+}
+
+#timer-value span {
+    float: left;
+}
+
+#timer-value span[contenteditable] {
+    width: 230px;
+    text-align: center;
+    outline: none;
+    /* font-family: consolas; */
+}
+
+#timer-value-msec {
+    font-size: 100px;
+    display: block;
+    position: absolute;
+    transform: translate(-50%, 0%);
+    right: -13px;
+    top: 185px;
+}
+
+#btn1 {
+    position: absolute;
+    /* bottom: 10%; */
+    left: 30%;
+    transform: translate(-50%, 0%);
+    background-color: #0C0;
+}
+
+#btn2 {
+    position: absolute;
+    /* bottom: 10%; */
+    right: 30%;
+    transform: translate(50%, 0%);
+    background-color: #F00;
+}
+
+#timer-btn {
+    height: 90px;
+}
+
+#timer-btn > * {
+    font-size: 45px;
+    font-weight: bolder;
+    border-radius: 16px;
+    cursor: pointer;
+    width: 190px;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    user-select: none;
+}
+
+.CENTER {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
