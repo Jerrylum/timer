@@ -10,7 +10,6 @@
     <meta name="description" content="No ads, a countdown stopwatch created by Jerrylum, better than online-stopwatch.com">
     <meta name="author" content="Jerrylum">
     <title>Jerry Timer</title>
-    <script src="./Sortable.min.js"></script>
 </head>
 
 <body>
@@ -26,9 +25,19 @@
                 </span>
                 <span id="timer-value-msec">000</span>
             </div>
-            <div id="timer-btn" class="optional">
-                <div id="btn1" onclick="clickBtn1Event()">Start</div>
-                <div id="btn2" onclick="clickBtn2Event()">Reset</div>
+            <div id="timer-btns" class="optional">
+                <div id="btn0" onclick="clickBtn0Event()">
+                    <span class="content">Timer</span>
+                    <span class="tooltiptext">Please reset the timer first</span>
+                </div>
+                <div id="btn1" class="disabled" onclick="clickBtn1Event()">
+                    <span class="content">Start</span>
+                    <span class="tooltiptext">Time is up, please reset the timer first</span>
+                </div>
+                <div id="btn2" onclick="clickBtn2Event()">
+                    <span class="content">Reset</span>
+                    <span class="tooltiptext"></span>
+                </div>
             </div>
         </div>
     </div>

@@ -47,6 +47,10 @@ body {
     top: 185px;
 }
 
+#btn0 {
+    background-color: #00C;
+}
+
 #btn1 {
     background-color: #0C0;
 }
@@ -55,24 +59,49 @@ body {
     background-color: #F00;
 }
 
-#timer-btn {
+#timer-btns {
     height: 90px;
     /* max-height: 0; */
     text-align: center;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    padding: 0 60px;
 }
 
-#timer-btn>* {
-    font-size: 45px;
+#timer-btns>* {
+    font-size: 30px;
     font-weight: bolder;
     border-radius: 16px;
     cursor: pointer;
     width: 190px;
-    height: 90px;
-    line-height: 90px;
+    height: 70px;
+    line-height: 70px;
     text-align: center;
     user-select: none;
-    display: inline-block;
-    margin: 0px 10%;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    transition: background 0.5s;
+    position: relative;
 }
 
 .CENTER {
@@ -85,4 +114,36 @@ body {
 .disabled {
     background-color: gray !important;
     cursor: not-allowed !important;
+}
+
+#timer-btns>* .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 110%;
+    left: 50%;
+    margin-left: -75px;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+#timer-btns>* .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+
+#timer-btns>.disabled:hover>.tooltiptext {
+    visibility: visible;
 }
