@@ -4,7 +4,8 @@
   "description": "No ads, an online timer created by Jerrylum, better than online-stopwatch.com",
   "main": "deploy.js",
   "scripts": {
-    "deploy": "node deploy.js && babel src --out-dir dist"
+    "deploy": "node deploy.js && babel src --out-dir dist",
+    "upload": "git subtree push --prefix dist origin gh-pages"
   },
   "keywords": [
     "timer",

@@ -172,12 +172,12 @@ function setFieldContent(elm, time, col = 2) {
     elm.innerText = time > 9 ? time + '' : (col == 3 ? '00' : '0') + time;
 }
 
-function getAllTimeValueField() {
-    return [
-        document.querySelector('#timer-value #H'),
-        document.querySelector('#timer-value #M'),
-        document.querySelector('#timer-value #S')
-    ];
+function getAllEditableTimeValueField() {
+    return document.querySelectorAll('#timer-value > *[contenteditable]');
+}
+
+function getMSecTimeValueField() {
+    return document.querySelector('#timer-value-msec');
 }
 
 function updateEditableDataToTimer(target) {
@@ -258,7 +258,7 @@ function nextTimeValueFieldEvent(e) {
         e.preventDefault();
 
         let now = e.target;
-        let allFields = getAllTimeValueField();
+        let allFields = getAllEditableTimeValueField();
 
         let next = allFields[(allFields.indexOf(now) + 1) % allFields.length];
         now.blur();
@@ -294,6 +294,16 @@ function clickBtn1Event() {
 }
 
 function clickBtn2Event() {
+    if (t instanceof StopwatchTimer) {
+        // if stopwatch, to 0
+        getAllEditableTimeValueField().forEach((x) => setFieldContent(x, 0))
+        setFieldContent(getMSecTimeValueField, 0)
+        timerEditableData = {
+            hour: 0,
+            minute: 0,
+            second: 0
+        };
+    }
     t.reset();
 }
 
@@ -314,7 +324,7 @@ function disableButton(elm, text, msg) {
 function updateTimerEvent() {
     let btn0 = document.getElementById('btn0');
     let btn1 = document.getElementById('btn1');
-    let fields = getAllTimeValueField();
+    let fields = getAllEditableTimeValueField();
     let msField = document.getElementById('timer-value-msec');
 
 
@@ -342,6 +352,7 @@ function updateTimerEvent() {
             enableButton(btn1, 'Pause');
         }
 
+        // should always update, important
 
         let ticks = t.displayTicks;
 
@@ -351,7 +362,7 @@ function updateTimerEvent() {
         ticks %= 60000;
         setFieldContent(fields[2], ticks / 1000);
         ticks %= 1000;
-        setFieldContent(msField, ticks, 3);
+        setFieldContent(msField, ticks);
 
     } else if (nowStatus == TimerStatus.PAUSE) {
         if (updateTimerEvent.lastStatus != nowStatus) {
@@ -402,7 +413,7 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
-getAllTimeValueField().forEach((x) => {
+getAllEditableTimeValueField().forEach((x) => {
     x.addEventListener('focus', focusTimeValueFieldEvent, false);
     x.addEventListener('blur', blurTimeValueFieldEvent, false);
     x.addEventListener('beforeinput', b4changedTimeValueFieldEvent, false);
