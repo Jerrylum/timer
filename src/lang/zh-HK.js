@@ -1,4 +1,5 @@
 useLanguage({
+    name: 'zh-HK',
     start: '開始',
     pause: '暫停',
     reset: '重設',

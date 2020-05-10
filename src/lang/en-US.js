@@ -1,4 +1,5 @@
 useLanguage({
+    name: 'en-US',
     start: 'Start',
     pause: 'Pause',
     reset: 'Reset',
