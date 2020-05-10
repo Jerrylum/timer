@@ -291,8 +291,8 @@ function clickBtn1Event() {
 function clickBtn2Event() {
     if (t instanceof StopwatchTimer) {
         // if stopwatch, to 0
-        getAllEditableTimeValueField().forEach((x) => setFieldContent(x, 0))
-        setFieldContent(getMSecTimeValueField, 0)
+        getAllEditableTimeValueField().forEach((x) => setFieldContent(x, 0));
+        setFieldContent(getMSecTimeValueField(), 0);
         timerEditableData = {
             hour: 0,
             minute: 0,
