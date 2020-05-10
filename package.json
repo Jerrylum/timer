@@ -1,0 +1,26 @@
+{
+  "name": "jerrytimer",
+  "version": "1.0.0",
+  "description": "No ads, an online timer created by Jerrylum, better than online-stopwatch.com",
+  "main": "deploy.js",
+  "scripts": {
+    "deploy": "node deploy.js && babel src --out-dir dist"
+  },
+  "keywords": [
+    "timer",
+    "tool"
+  ],
+  "author": "Jerrylum",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-typeof-symbol": "^7.8.4",
+    "@babel/preset-env": "^7.9.6",
+    "ncp": "^2.0.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.8.7"
+  }
+}

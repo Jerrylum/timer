@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="./style.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="theme-color" content="black">
+    <meta name="keywords" content="stopwatch, countdown, timer, free, no ads">
+    <meta name="subject" content="timer, tool">
+    <meta name="description" content="No ads, an online timer created by Jerrylum, better than online-stopwatch.com">
+    <meta name="author" content="Jerrylum">
+    <title>Jerry Timer</title>
+    <script src="./polyfill.min.js"></script>
+</head>
+
+<body>
+    <div class="CENTER" id="timer">
+        <div id="timer-content">
+            <div id="timer-body">
+                <span id="timer-value">
+                    <span id="H" contenteditable="true">00</span>
+                    <span>:</span>
+                    <span id="M" contenteditable="true">00</span>
+                    <span>:</span>
+                    <span id="S" contenteditable="true">00</span>
+                </span>
+                <span id="timer-value-msec">000</span>
+            </div>
+            <div id="timer-btns" class="optional">
+                <div id="btn0" onclick="clickBtn0Event()">
+                    <span class="content">Timer</span>
+                    <span class="tooltiptext">Please reset the timer first</span>
+                </div>
+                <div id="btn1" class="disabled" onclick="clickBtn1Event()">
+                    <span class="content">Start</span>
+                    <span class="tooltiptext">Time is up, please reset the timer first</span>
+                </div>
+                <div id="btn2" onclick="clickBtn2Event()">
+                    <span class="content">Reset</span>
+                    <span class="tooltiptext"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "browsers": [
+                        "IE 11, last 2 versions"
+                    ]
+                }
+            }
+        ]
+    ],
+    "ignore": [
+        "node_modules"
+    ],
+    "plugins": [
+        "@babel/plugin-transform-typeof-symbol",
+        "@babel/plugin-proposal-class-properties"
+    ]
+}
