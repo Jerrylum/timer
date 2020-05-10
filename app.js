@@ -1,10 +1,10 @@
 'use strict';
 
 class TimerStatus {
-    static INIT = new Symbol();
-    static RUNNING = new Symbol();
-    static PAUSE = new Symbol();
-    static TIMESUP = new Symbol();
+    static INIT = Symbol();
+    static RUNNING = Symbol();
+    static PAUSE = Symbol();
+    static TIMESUP = Symbol();
 }
 
 class CountdownTimer {
@@ -36,19 +36,25 @@ class CountdownTimer {
         this._totalTicks = h * 3600000 + m * 60000 + s * 1000;
     }
 
-
-
     get isTimeup() {
-        return this.remainingTicks == 0;
-    }
-
-    get isPause() {
-        return (!this.isRunning) && this._previousTicks != 0; // see also this.stop()
+        return this.status == TimerStatus.TIMESUP;
     }
 
     get isRunning() {
-        return (!this.isTimeup) && (this._startTick != null);
+        return this.status == TimerStatus.RUNNING;
     }
+
+    get status() {
+        if (this._startTick == null && this._previousTicks == 0)
+            return TimerStatus.INIT;
+        else if (this._startTick != null && this.remainingTicks != 0)
+            return TimerStatus.RUNNING;
+        else if (this._startTick == null && this._previousTicks != 0)
+            return TimerStatus.PAUSE;
+        else if (this.remainingTicks == 0)
+            return TimerStatus.TIMESUP;
+    }
+
 
     get totalTicks() {
         return this._totalTicks;
@@ -160,16 +166,87 @@ function nextTimeValueFieldEvent(e) {
 }
 
 function clickBtn1Event() {
-    if (t.totalTicks != 0 && t.isTimeup)
+    if (t.status == TimerStatus.INIT && t.totalTicks != 0)
         t.start();
-    else if (t.isRunning)
+    else if (t.status == TimerStatus.RUNNING)
         t.stop();
-    else
+    else if (t.status == TimerStatus.PAUSE)
         t.start();
 }
 
 function clickBtn2Event() {
     t.reset();
+}
+
+function updateTimerEvent() {
+    let btn1 = document.getElementById('btn1');
+    let fields = getAllTimeValueField();
+    let msField = document.getElementById('timer-value-msec');
+
+
+    let nowStatus = t.status;
+
+    if (nowStatus == TimerStatus.TIMESUP) {
+        if (this.lastStatus != nowStatus) {
+            fields.forEach((x) => x.setAttribute('contenteditable', 'false'));
+
+            btn1.className = 'disabled';
+            btn1.innerText = 'Start';
+
+            setFieldContent(fields[0], 0);
+            setFieldContent(fields[1], 0);
+            setFieldContent(fields[2], 0);
+            setFieldContent(msField, 0, 3);
+        }
+
+    } else if (nowStatus == TimerStatus.RUNNING) {
+        if (this.lastStatus != nowStatus) {
+
+            fields.forEach((x) => x.setAttribute('contenteditable', 'false'));
+
+            btn1.className = '';
+            btn1.innerText = 'Pause';
+        }
+
+
+        let ticks = t.remainingTicks;
+
+        setFieldContent(fields[0], ticks / 3600000);
+        ticks %= 3600000;
+        setFieldContent(fields[1], ticks / 60000);
+        ticks %= 60000;
+        setFieldContent(fields[2], ticks / 1000);
+        ticks %= 1000;
+        setFieldContent(msField, ticks, 3);
+
+    } else if (nowStatus == TimerStatus.PAUSE) {
+        if (this.lastStatus != nowStatus) {
+             // the user can edit the time
+            fields.forEach((x) => x.setAttribute('contenteditable', 'true'));
+
+            btn1.className = '';
+            btn1.innerText = 'Start';
+        }
+
+    } else { // init status, make the field editable
+
+        if (this.lastStatus != nowStatus) {
+            let { hour, minute, second } = timerEditableData;
+
+            setFieldContent(fields[0], hour);
+            setFieldContent(fields[1], minute);
+            setFieldContent(fields[2], second);
+            setFieldContent(msField, 0, 3);
+
+            fields.forEach((x) => x.setAttribute('contenteditable', 'true'));
+
+            btn1.className = '';
+            btn1.innerText = 'Start';
+        }
+
+    }
+
+    this.lastStatus = nowStatus;
 }
 
 
@@ -194,67 +271,4 @@ getAllTimeValueField().forEach((x) => {
     x.addEventListener('input', changedTimeValueFieldEvent, false);
 });
 
-setInterval(function () {
-
-    let btn1 = document.getElementById('btn1');
-    let fields = getAllTimeValueField();
-    let msField = document.getElementById('timer-value-msec');
-    if (t.totalTicks != 0 && t.isTimeup) {
-        this.editable = false;
-
-        fields.forEach((x) => x.setAttribute("contenteditable", "false"));
-
-        btn1.className = 'disabled';
-        btn1.innerText = 'Start';
-
-        setFieldContent(fields[0], 0);
-        setFieldContent(fields[1], 0);
-        setFieldContent(fields[2], 0);
-        setFieldContent(msField, 0, 3);
-    } else if (t.isRunning) {
-        if (this.editable) {
-            this.editable = false;
-
-            fields.forEach((x) => x.setAttribute("contenteditable", "false"));
-
-            btn1.className = '';
-            btn1.innerText = 'Pause';
-        }
-
-
-        let ticks = t.remainingTicks;
-
-        setFieldContent(fields[0], ticks / 3600000);
-        ticks %= 3600000;
-        setFieldContent(fields[1], ticks / 60000);
-        ticks %= 60000;
-        setFieldContent(fields[2], ticks / 1000);
-        ticks %= 1000;
-        setFieldContent(msField, ticks, 3);
-    } else if (t.isPause) {
-        this.editable = false;
-
-        fields.forEach((x) => x.setAttribute("contenteditable", "false"));
-
-        btn1.className = '';
-        btn1.innerText = 'Start';
-    } else { // reset, make the field editable
-        if (!this.editable) {
-            this.editable = true;
-
-            let { hour, minute, second } = timerEditableData;
-
-            setFieldContent(fields[0], hour);
-            setFieldContent(fields[1], minute);
-            setFieldContent(fields[2], second);
-            setFieldContent(msField, 0, 3);
-
-            fields.forEach((x) => x.setAttribute("contenteditable", "true"));
-
-            btn1.className = '';
-            btn1.innerText = 'Start';
-        }
-
-    }//TODO updated
-
-}, 1);
+setInterval(updateTimerEvent, 1);

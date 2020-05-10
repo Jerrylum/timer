@@ -5,13 +5,13 @@ body {
 
 #timer {
     width: 900px;
-    height: 400px;
+    /* height: 400px; */
+    font-family: Arial;
 }
 
 #timer-content {
     width: 900px;
-    height: 440px;
-    font-family: Arial;
+    /* height: 440px; */
 }
 
 #timer-body {
@@ -48,23 +48,17 @@ body {
 }
 
 #btn1 {
-    position: absolute;
-    /* bottom: 10%; */
-    left: 30%;
-    transform: translate(-50%, 0%);
     background-color: #0C0;
 }
 
 #btn2 {
-    position: absolute;
-    /* bottom: 10%; */
-    right: 30%;
-    transform: translate(50%, 0%);
     background-color: #F00;
 }
 
 #timer-btn {
     height: 90px;
+    /* max-height: 0; */
+    text-align: center;
 }
 
 #timer-btn>* {
@@ -77,6 +71,8 @@ body {
     line-height: 90px;
     text-align: center;
     user-select: none;
+    display: inline-block;
+    margin: 0px 10%;
 }
 
 .CENTER {
@@ -88,4 +84,5 @@ body {
 
 .disabled {
     background-color: gray !important;
+    cursor: not-allowed !important;
 }

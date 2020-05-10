@@ -1,10 +1,16 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <link href="./style.css" rel="stylesheet" type="text/css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="theme-color" content="black">
+    <meta name="keywords" content="stopwatch, countdown, timer, free, no ads">
+    <meta name="subject" content="timer, tool">
+    <meta name="description" content="No ads, a countdown stopwatch created by Jerrylum, better than online-stopwatch.com">
+    <meta name="author" content="Jerrylum">
     <title>Jerry Timer</title>
-
+    <script src="./Sortable.min.js"></script>
 </head>
 
 <body>
@@ -12,7 +18,7 @@
         <div id="timer-content">
             <div id="timer-body">
                 <span id="timer-value">
-                    <span id="H" contenteditable="true"  min="1" max="5">00</span>
+                    <span id="H" contenteditable="true">00</span>
                     <span>:</span>
                     <span id="M" contenteditable="true">00</span>
                     <span>:</span>
@@ -20,11 +26,10 @@
                 </span>
                 <span id="timer-value-msec">000</span>
             </div>
-            <div id="timer-btn">
+            <div id="timer-btn" class="optional">
                 <div id="btn1" onclick="clickBtn1Event()">Start</div>
                 <div id="btn2" onclick="clickBtn2Event()">Reset</div>
             </div>
-
         </div>
     </div>
     <script src="./app.js"></script>
