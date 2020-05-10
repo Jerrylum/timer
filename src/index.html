@@ -2,20 +2,31 @@
 <html>
 
 <head>
-    <link href="./style.css" rel="stylesheet" type="text/css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="theme-color" content="black">
     <meta name="keywords" content="stopwatch, countdown, timer, free, no ads">
     <meta name="subject" content="timer, tool">
     <meta name="description" content="No ads, an online timer created by Jerrylum, better than online-stopwatch.com">
     <meta name="author" content="Jerrylum">
-    <link rel="icon" sizes="32x32" href="./favicon.ico">
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" sizes="32x32" href="./favicon.ico" />
     <title>Jerry Timer</title>
-    <script src="./polyfill.min.js"></script>
+    <script src="./script/polyfill.min.js"></script>
+    <script src="./script/app.js"></script>
+    <script src="./script/lang.js"></script>
+    <script src="./lang/en-US.js"></script>
 </head>
 
-<body>
+<body onload="loaded();">
+    <div id="setting-area">
+        <div class="dropdown">
+            <img src="./img/language.svg" alt="Language">
+            <div id="change-language" class="dropdown-content"></div>
+        </div>
+
+    </div>
     <div class="CENTER" id="timer">
+
         <div id="timer-content">
             <div id="timer-body">
                 <span id="timer-value">
@@ -29,21 +40,20 @@
             </div>
             <div id="timer-btns" class="optional">
                 <div id="btn0" onclick="clickBtn0Event()">
-                    <span class="content">Timer</span>
-                    <span class="tooltiptext">Please reset the timer first</span>
+                    <span class="content"></span>
+                    <span class="tooltiptext"></span>
                 </div>
                 <div id="btn1" class="disabled" onclick="clickBtn1Event()">
-                    <span class="content">Start</span>
-                    <span class="tooltiptext">Time is up, please reset the timer first</span>
+                    <span class="content"></span>
+                    <span class="tooltiptext"></span>
                 </div>
                 <div id="btn2" onclick="clickBtn2Event()">
-                    <span class="content">Reset</span>
+                    <span class="content"></span>
                     <span class="tooltiptext"></span>
                 </div>
             </div>
         </div>
     </div>
-    <script src="./app.js"></script>
 </body>
 
 </html>

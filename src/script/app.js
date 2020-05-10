@@ -28,7 +28,7 @@ class Timer {
      * Set the time value of this timer
      * @param {number} a Hour or tick
      * @param {number} b Minute or undefined
-     * @param {number} c Second
+     * @param {number} c Second or undefined
      */
     set(a, b, c) {
         throw new Error("NotImplementedError");
@@ -173,7 +173,7 @@ function setFieldContent(elm, time, col = 2) {
 }
 
 function getAllEditableTimeValueField() {
-    return document.querySelectorAll('#timer-value > *[contenteditable]');
+    return [...document.querySelectorAll('#timer-value > *[contenteditable]')];
 }
 
 function getMSecTimeValueField() {
@@ -272,12 +272,7 @@ function clickBtn0Event() {
         t = t instanceof CountdownTimer ? new StopwatchTimer() : new CountdownTimer();
         t.set(oldClockTicks);
 
-        let btn0 = document.querySelector('#btn0 .content');
-        if (t instanceof CountdownTimer) {
-            btn0.innerText = 'Timer';
-        } else {
-            btn0.innerText = 'Stopwatch';
-        }
+        languageInit();
     }
 }
 
@@ -321,7 +316,21 @@ function disableButton(elm, text, msg) {
         elm.querySelector('.tooltiptext').innerText = msg;
 }
 
-function updateTimerEvent() {
+function languageInit() {
+    langUpdateSignalFlag = false;
+
+    document.querySelector('#btn0 .content').innerText =
+        t instanceof CountdownTimer ?
+            lang.countdown :
+            lang.stopwatch;
+
+    document.querySelector('#btn2 .content').innerText = lang.reset;
+
+}
+
+function updateScreenEvent() {
+    if (langUpdateSignalFlag) languageInit();
+
     let btn0 = document.getElementById('btn0');
     let btn1 = document.getElementById('btn1');
     let fields = getAllEditableTimeValueField();
@@ -331,11 +340,11 @@ function updateTimerEvent() {
     let nowStatus = t.status;
 
     if (nowStatus == TimerStatus.TIMESUP) {
-        if (updateTimerEvent.lastStatus != nowStatus) {
+        if (updateScreenEvent.lastStatus != nowStatus) {
             fields.forEach((x) => x.setAttribute('contenteditable', 'false'));
 
-            disableButton(btn0);
-            disableButton(btn1, 'Start', 'Time is up, please reset the timer first');
+            disableButton(btn0, null, lang.timer_mode_blocked_warning);
+            disableButton(btn1, lang.start, lang.times_up_blocked_warning);
 
             setFieldContent(fields[0], 0);
             setFieldContent(fields[1], 0);
@@ -344,12 +353,12 @@ function updateTimerEvent() {
         }
 
     } else if (nowStatus == TimerStatus.RUNNING) {
-        if (updateTimerEvent.lastStatus != nowStatus) {
+        if (updateScreenEvent.lastStatus != nowStatus) {
 
             fields.forEach((x) => x.setAttribute('contenteditable', 'false'));
 
-            disableButton(btn0);
-            enableButton(btn1, 'Pause');
+            disableButton(btn0, null, lang.timer_mode_blocked_warning);
+            enableButton(btn1, lang.pause);
         }
 
         // should always update, important
@@ -365,17 +374,17 @@ function updateTimerEvent() {
         setFieldContent(msField, ticks);
 
     } else if (nowStatus == TimerStatus.PAUSE) {
-        if (updateTimerEvent.lastStatus != nowStatus) {
+        if (updateScreenEvent.lastStatus != nowStatus) {
             // the user can edit the time
             fields.forEach((x) => x.setAttribute('contenteditable', 'true'));
 
-            disableButton(btn0);
-            enableButton(btn1, 'Start');
+            disableButton(btn0, null, lang.timer_mode_blocked_warning);
+            enableButton(btn1, lang.start);
         }
 
     } else { // init status, make the field editable
 
-        if (updateTimerEvent.lastStatus != nowStatus) {
+        if (updateScreenEvent.lastStatus != nowStatus) {
             let { hour, minute, second } = timerEditableData;
 
             setFieldContent(fields[0], hour);
@@ -390,14 +399,40 @@ function updateTimerEvent() {
         }
 
         if (t instanceof CountdownTimer && t.displayTicks == 0)
-            disableButton(btn1, 'Start', 'Timer cannot be set to zero');
+            disableButton(btn1, lang.start, lang.time_zero_warning);
         else
-            enableButton(btn1, 'Start');
+            enableButton(btn1, lang.start);
     }
 
-    updateTimerEvent.lastStatus = nowStatus;
+    updateScreenEvent.lastStatus = nowStatus;
 }
 
+function loaded() {
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Tab' || e.key === 'Enter') {
+            nextTimeValueFieldEvent(e);
+        }
+    });
+
+    getAllEditableTimeValueField().forEach((x) => {
+        x.addEventListener('focus', focusTimeValueFieldEvent, false);
+        x.addEventListener('blur', blurTimeValueFieldEvent, false);
+        x.addEventListener('beforeinput', b4changedTimeValueFieldEvent, false);
+        x.addEventListener('input', changedTimeValueFieldEvent, false);
+    });
+
+    let langDropdown = document.querySelector('#change-language');
+
+    for (let code in languages) {
+        let link = document.createElement('span');
+        link.innerText = languages[code];
+        link.addEventListener('click', () => loadLanguage(code));
+
+        langDropdown.appendChild(link);
+    }
+
+    setInterval(updateScreenEvent, 1);
+}
 
 let timerEditableData = {
     hour: 0,
@@ -407,17 +442,4 @@ let timerEditableData = {
 
 let t = new CountdownTimer();
 
-document.addEventListener('keydown', function (e) {
-    if (e.key === 'Tab' || e.key === 'Enter') {
-        nextTimeValueFieldEvent(e);
-    }
-});
-
-getAllEditableTimeValueField().forEach((x) => {
-    x.addEventListener('focus', focusTimeValueFieldEvent, false);
-    x.addEventListener('blur', blurTimeValueFieldEvent, false);
-    x.addEventListener('beforeinput', b4changedTimeValueFieldEvent, false);
-    x.addEventListener('input', changedTimeValueFieldEvent, false);
-});
-
-setInterval(updateTimerEvent, 1);
+let langUpdateSignalFlag = false;
