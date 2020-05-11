@@ -2,7 +2,7 @@
 
 let lang;
 
-const languages = {
+const languagesList = {
     "en-US": "English",
     "zh-HK": "繁體中文"
 };
@@ -16,7 +16,6 @@ function loadLanguage(code) {
 
 function useLanguage(newLang) {
     lang = lang == undefined ? newLang : Object.assign(lang, newLang);
-    langUpdateSignalFlag = true;
     document.cookie = 'lang=' + newLang.name + ';';
 }
 

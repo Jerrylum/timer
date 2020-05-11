@@ -38,7 +38,7 @@ class Timer {
         this._startTick = null;
         this._previousTicks = 0;
 
-        let { hour, minute, second } = timerEditableData;
+        let { hour, minute, second } = vi.timerEditableData;
         this.set(hour, minute, second);
     }
 
@@ -72,7 +72,7 @@ class StopwatchTimer extends Timer {
             a = a * 3600000 + b * 60000 + c * 1000;
 
         if (this.status == TimerStatus.PAUSE) {
-            this._initTicks = a + this._previousTicks % 1000 + 1; // keep ms
+            this._initTicks = a + this.displayTicks % 1000 - 1; // keep ms
             this._previousTicks = 1; // keep pause mode
         } else {
             this._initTicks = a;
@@ -122,7 +122,7 @@ class CountdownTimer extends Timer {
             a = a * 3600000 + b * 60000 + c * 1000;
 
         if (this.status == TimerStatus.PAUSE) {
-            this._totalTicks = a + this._previousTicks % 1000 + 1; // keep ms
+            this._totalTicks = a + this.displayTicks % 1000 + 1; // keep ms
             this._previousTicks = 1; // keep pause mode
         } else {
             this._totalTicks = a;
@@ -167,279 +167,237 @@ class CountdownTimer extends Timer {
 
 }
 
-function setFieldContent(elm, time, col = 2) {
-    time = Math.trunc(time);
-    elm.innerText = time > 9 ? time + '' : (col == 3 ? '00' : '0') + time;
-}
-
 function getAllEditableTimeValueField() {
     return [...document.querySelectorAll('#timer-value > *[contenteditable]')];
 }
 
-function getMSecTimeValueField() {
-    return document.querySelector('#timer-value-msec');
-}
+let vi = new Vue({
+    el: '#thebody',
+    mounted() {
+        getAllEditableTimeValueField().forEach((x) => {
+            x.addEventListener('focus', this.focusTimeValueFieldEvent, false);
+            x.addEventListener('blur', this.blurTimeValueFieldEvent, false);
+            x.addEventListener('beforeinput', this.b4changedTimeValueFieldEvent, false);
+            x.addEventListener('input', this.changedTimeValueFieldEvent, false);
+        });
 
-function updateEditableDataToTimer(target) {
-    let value = Math.trunc(target.innerText);
-
-    let target_id = target.id;
-    if (target_id === 'H') {
-        timerEditableData.hour = value;
-    } else if (target_id === 'M') {
-        timerEditableData.minute = value;
-    } else if (target_id === 'S') {
-        timerEditableData.second = value;
-    }
-
-    let { hour, minute, second } = timerEditableData;
-    t.set(hour, minute, second);
-}
-
-function focusTimeValueFieldEvent(e) {
-    let target = e.target;
-
-    target.beforeFocus = target.innerText;
-    target.innerText = '';
-}
-
-function blurTimeValueFieldEvent(e) {
-    let target = e.target;
-    let value_str = target.innerText;
-    let value = Math.trunc(value_str);
-
-    // important
-    if (value_str.length == 0 || value_str.length > 2 || isNaN(value) || value_str.indexOf('.') !== -1) {
-        target.innerText = target.beforeFocus;
-    } else {
-        value = Math.max(0, Math.min(value, 59));
-        setFieldContent(target, value);
-    }
-    updateEditableDataToTimer(target);
-}
-
-function b4changedTimeValueFieldEvent(e) {
-    e.target.beforeInput = e.target.innerText;
-}
-
-function changedTimeValueFieldEvent(e) {
-    let sel = window.getSelection();
-    let startOffset = sel.getRangeAt(0).startOffset; // the orignal
-
-    let target = e.target;
-    let value_str = target.innerText;
-
-    if (value_str.length == 0) {
-        value_str = target.innerText = '0';
-    } else if (value_str.length > 2) {
-        value_str = target.innerText = value_str.slice(0, 2);
-    }
-
-    let value = Math.trunc(value_str);
-    if (isNaN(value) || value_str.indexOf('.') !== -1) {
-        target.innerText = target.beforeInput;
-    }
-
-    // set target.innerText will reset the caret position to zero
-    // set the caret position to undo the effect
-    let newRange = document.createRange();
-    newRange.setStart(target.childNodes[0], Math.min(target.innerText.length, startOffset));
-    newRange.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(newRange);
-
-    // finally, update the data
-    updateEditableDataToTimer(target);
-}
-
-function nextTimeValueFieldEvent(e) {
-    let target_id = e.target.id;
-    if (target_id === 'H' || target_id === 'M' || target_id === 'S') {
-        e.preventDefault();
-
-        let now = e.target;
-        let allFields = getAllEditableTimeValueField();
-
-        let next = allFields[(allFields.indexOf(now) + 1) % allFields.length];
-        now.blur();
-        next.focus();
-    }
-}
-
-function clickBtn0Event() {
-    if (t.status == TimerStatus.INIT) {
-        let oldClockTicks = t.displayTicks;
-        t = t instanceof CountdownTimer ? new StopwatchTimer() : new CountdownTimer();
-        t.set(oldClockTicks);
-
-        languageInit();
-    }
-}
-
-function clickBtn1Event() {
-    if (t.status == TimerStatus.INIT)
-        if ((t instanceof CountdownTimer) && (t.totalTicks == 0))
-            return;
-        else
-            t.start();
-    else if (t.status == TimerStatus.RUNNING)
-        t.stop();
-    else if (t.status == TimerStatus.PAUSE)
-        t.start();
-}
-
-function clickBtn2Event() {
-    if (t instanceof StopwatchTimer) {
-        // if stopwatch, to 0
-        getAllEditableTimeValueField().forEach((x) => setFieldContent(x, 0));
-        setFieldContent(getMSecTimeValueField(), 0);
-        timerEditableData = {
+    },
+    data: {
+        lang: lang,
+        languagesList: languagesList,
+        t: new CountdownTimer(),
+        timerEditableData: {
             hour: 0,
             minute: 0,
             second: 0
-        };
+        },
+        timerEditingFlag: {
+            hour: false,
+            minute: false,
+            second: false
+        },
+        themesList: ['dark', 'light'],
+        theme: 'dark'
+    },
+    watch: {
+        theme: {
+            handler: function () {
+                document.querySelector('body').className = this.theme;
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        BodyKeyDownEvent: function (e) {
+            if (e.key === 'Tab' || e.key === 'Enter') {
+                let target_id = e.target.id;
+                if (target_id === 'hour' || target_id === 'minute' || target_id === 'second') {
+                    e.preventDefault();
+
+                    let now = e.target;
+                    let allFields = getAllEditableTimeValueField();
+
+                    let next = allFields[(allFields.indexOf(now) + 1) % allFields.length];
+                    now.blur();
+                    next.focus();
+                }
+            }
+        },
+
+        clickBtn0Event: function () {
+            if (this.t.status == TimerStatus.INIT) {
+                let oldClockTicks = this.t.displayTicks;
+                this.t = this.t instanceof CountdownTimer ? new StopwatchTimer() : new CountdownTimer();
+                this.t.set(oldClockTicks);
+            }
+        },
+
+        clickBtn1Event: function () {
+            if (this.t.status == TimerStatus.INIT)
+                if ((this.t instanceof CountdownTimer) && (this.t.totalTicks == 0))
+                    return;
+                else
+                    this.t.start();
+            else if (this.t.status == TimerStatus.RUNNING)
+                this.t.stop();
+            else if (this.t.status == TimerStatus.PAUSE)
+                this.t.start();
+        },
+
+        clickBtn2Event: function () {
+            if (this.t instanceof StopwatchTimer) {
+                // if stopwatch, to 0
+                this.timerEditableData = {
+                    hour: 0,
+                    minute: 0,
+                    second: 0
+                };
+            }
+            this.t.reset();
+        },
+
+
+        updateEditableDataAndHtml: function (target, value) {
+            if (target.id === 'hour') {
+                value = Math.max(0, Math.min(value, 99));
+            } else if (target.id === 'minute') {
+                value = Math.max(0, Math.min(value, 59));
+            } else if (target.id === 'second') {
+                value = Math.max(0, Math.min(value, 59));
+            }
+            this.timerEditableData[target.id] = value;
+            target.innerText = value;
+
+            let { hour, minute, second } = this.timerEditableData;
+            this.t.set(hour, minute, second);
+        },
+
+        focusTimeValueFieldEvent: function (e) {
+            let target = e.target;
+
+            this.timerEditingFlag[target.id] = true;
+
+            target.beforeFocus = target.innerText;
+        },
+
+        blurTimeValueFieldEvent: function (e) {
+            let target = e.target;
+            let value_str = target.innerText;
+            let value = Math.trunc(value_str);
+
+            this.timerEditingFlag[target.id] = false;
+
+            // important
+            if (value_str.length == 0 || value_str.length > 2 || isNaN(value) || value_str.indexOf('.') !== -1) {
+                value = Math.trunc(target.beforeFocus);
+            }
+            this.updateEditableDataAndHtml(target, value);
+        },
+
+        b4changedTimeValueFieldEvent: function (e) {
+            e.target.beforeInput = e.target.innerText;
+        },
+
+        changedTimeValueFieldEvent: function (e) {
+            let sel = window.getSelection();
+            let startOffset = sel.getRangeAt(0).startOffset; // the orignal
+
+            let target = e.target;
+            let value_str = target.innerText;
+
+            if (value_str.length == 0) {
+                value_str = target.innerText = '0';
+            } else if (value_str.length > 2) {
+                value_str = target.innerText = value_str.slice(0, 2);
+            }
+
+            let value = Math.trunc(value_str);
+            if (isNaN(value) || value_str.indexOf('.') !== -1) {
+                value = Math.trunc(target.beforeInput);
+            }
+
+            // update the data
+            this.updateEditableDataAndHtml(target, value);
+
+            // set target.innerText will reset the caret position to zero
+            // set the caret position to undo the effect
+            let newRange = document.createRange();
+            newRange.setStart(target.childNodes[0], Math.min(target.innerText.length, startOffset));
+            newRange.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(newRange);
+
+        }
+
+    },
+    computed: {
+        displayTicks: function () {
+            return t.displayTicks;
+        },
+
+        /**
+         * when the flag == true, the user start typing. we should clear the content
+         */
+
+        timeH: function () {
+            if (this.timerEditingFlag.hour) return '';
+
+            let time = Math.trunc(this.t.displayTicks / 3600000);
+            return time > 9 ? time + '' : '0' + time;
+        },
+
+        timeM: function () {
+            if (this.timerEditingFlag.minute) return '';
+
+            let time = Math.trunc(this.t.displayTicks % 3600000 / 60000);
+            return time > 9 ? time + '' : '0' + time;
+        },
+
+        timeS: function () {
+            if (this.timerEditingFlag.second) return '';
+
+            let time = Math.trunc(this.t.displayTicks % 60000 / 1000);
+            return time > 9 ? time + '' : '0' + time;
+        },
+
+        timeMS: function () {
+            if (this.t.status == TimerStatus.INIT) return '000';
+
+            let time = Math.trunc(this.t.displayTicks % 1000);
+            return time;
+        },
+
+        isBtn0Disabled: function () {
+            return this.t.status != TimerStatus.INIT;
+        },
+
+        isBtn1Disabled: function () {
+            return this.t instanceof CountdownTimer ?
+                this.t.status == TimerStatus.TIMESUP || this.t.displayTicks == 0 :
+                false;
+        },
+
+        getBtn1Warning: function () {
+            return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : lang.time_zero_warning;
+        },
+
+        getBtn0Message: function () {
+            return this.t instanceof CountdownTimer ?
+                lang.countdown :
+                lang.stopwatch
+        },
+
+        getBtn1Message: function () {
+            return this.t.status == TimerStatus.RUNNING ? lang.pause : lang.start;
+        },
+
+        isEditable: function () {
+            return this.t.status == TimerStatus.INIT || this.t.status == TimerStatus.PAUSE;
+        }
     }
-    t.reset();
-}
+});
 
-function enableButton(elm, text) {
-    elm.className = '';
-    if (text)
-        elm.querySelector('.content').innerText = text;
-}
-
-function disableButton(elm, text, msg) {
-    elm.className = 'disabled';
-    if (text)
-        elm.querySelector('.content').innerText = text;
-    if (msg)
-        elm.querySelector('.tooltiptext').innerText = msg;
-}
-
-function languageInit() {
-    langUpdateSignalFlag = false;
-
-    document.querySelector('#btn0 .content').innerText =
-        t instanceof CountdownTimer ?
-            lang.countdown :
-            lang.stopwatch;
-
-    document.querySelector('#btn2 .content').innerText = lang.reset;
-
-}
-
-function updateScreenEvent() {
-    if (langUpdateSignalFlag) languageInit();
-
-    let btn0 = document.getElementById('btn0');
-    let btn1 = document.getElementById('btn1');
-    let fields = getAllEditableTimeValueField();
-    let msField = document.getElementById('timer-value-msec');
-
-
-    let nowStatus = t.status;
-
-    if (nowStatus == TimerStatus.TIMESUP) {
-        if (updateScreenEvent.lastStatus != nowStatus) {
-            fields.forEach((x) => x.setAttribute('contenteditable', 'false'));
-
-            disableButton(btn0, null, lang.timer_mode_blocked_warning);
-            disableButton(btn1, lang.start, lang.times_up_blocked_warning);
-
-            setFieldContent(fields[0], 0);
-            setFieldContent(fields[1], 0);
-            setFieldContent(fields[2], 0);
-            setFieldContent(msField, 0, 3);
-        }
-
-    } else if (nowStatus == TimerStatus.RUNNING) {
-        if (updateScreenEvent.lastStatus != nowStatus) {
-
-            fields.forEach((x) => x.setAttribute('contenteditable', 'false'));
-
-            disableButton(btn0, null, lang.timer_mode_blocked_warning);
-            enableButton(btn1, lang.pause);
-        }
-
-        // should always update, important
-
-        let ticks = t.displayTicks;
-
-        setFieldContent(fields[0], ticks / 3600000);
-        ticks %= 3600000;
-        setFieldContent(fields[1], ticks / 60000);
-        ticks %= 60000;
-        setFieldContent(fields[2], ticks / 1000);
-        ticks %= 1000;
-        setFieldContent(msField, ticks);
-
-    } else if (nowStatus == TimerStatus.PAUSE) {
-        if (updateScreenEvent.lastStatus != nowStatus) {
-            // the user can edit the time
-            fields.forEach((x) => x.setAttribute('contenteditable', 'true'));
-
-            disableButton(btn0, null, lang.timer_mode_blocked_warning);
-            enableButton(btn1, lang.start);
-        }
-
-    } else { // init status, make the field editable
-
-        if (updateScreenEvent.lastStatus != nowStatus) {
-            let { hour, minute, second } = timerEditableData;
-
-            setFieldContent(fields[0], hour);
-            setFieldContent(fields[1], minute);
-            setFieldContent(fields[2], second);
-            setFieldContent(msField, 0, 3);
-
-            fields.forEach((x) => x.setAttribute('contenteditable', 'true'));
-
-            enableButton(btn0);
-
-        }
-
-        if (t instanceof CountdownTimer && t.displayTicks == 0)
-            disableButton(btn1, lang.start, lang.time_zero_warning);
-        else
-            enableButton(btn1, lang.start);
-    }
-
-    updateScreenEvent.lastStatus = nowStatus;
-}
-
-function loaded() {
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Tab' || e.key === 'Enter') {
-            nextTimeValueFieldEvent(e);
-        }
-    });
-
-    getAllEditableTimeValueField().forEach((x) => {
-        x.addEventListener('focus', focusTimeValueFieldEvent, false);
-        x.addEventListener('blur', blurTimeValueFieldEvent, false);
-        x.addEventListener('beforeinput', b4changedTimeValueFieldEvent, false);
-        x.addEventListener('input', changedTimeValueFieldEvent, false);
-    });
-
-    let langDropdown = document.querySelector('#change-language');
-
-    for (let code in languages) {
-        let link = document.createElement('span');
-        link.innerText = languages[code];
-        link.addEventListener('click', () => loadLanguage(code));
-
-        langDropdown.appendChild(link);
-    }
-
-    setInterval(updateScreenEvent, 1);
-}
-
-let timerEditableData = {
-    hour: 0,
-    minute: 0,
-    second: 0
-}
-
-let t = new CountdownTimer();
-
-let langUpdateSignalFlag = false;
+setInterval(function () {
+    // HACK, manually update
+    vi.t.__ob__.dep.notify();
+}, 1);
