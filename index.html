@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="google-site-verification" content="LwuwO4PWouh6opvAm4lmFUnRt4I9nOFH7NJP8Dam7TQ" />
+    <meta name="theme-color" content="black">
+    <meta name="keywords" content="stopwatch, countdown, timer, free, no ads">
+    <meta name="subject" content="timer, tool">
+    <meta name="description" content="No ads, an online timer created by Jerrylum, better than online-stopwatch.com">
+    <meta name="author" content="Jerrylum">
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" sizes="32x32" href="./favicon.ico" />
+    <title>Jerry Timer</title>
+    <script src="./script/polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="./script/lang.js"></script>
+    <script src="./lang/en-US.js"></script>
+</head>
+
+<body>
+    <div id="thebody" @keydown="BodyKeyDownEvent">
+        <div id="setting-area">
+            <div class="normal-icon dropdown">
+                <img src="./img/language.svg" :title="lang.change_language">
+                <div id="change-language" class="dropdown-content">
+                    <span v-for="(name, code, index) in languagesList" v-on:click="loadLanguage(code)">{{ name }}</span>
+                </div>
+            </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/theme.svg" :title="lang.change_theme">
+                <div id="change-theme" class="dropdown-content">
+                    <span v-for="code in themesList" v-on:click="theme=code">{{ lang.theme[code] }}</span>
+                </div>
+            </div>
+            <div class="normal-icon">
+                <a href="./intro" target="_blank">
+                    <img src="./img/question.svg" :title="lang.get_help" href="google.com">
+                </a>
+            </div>
+        </div>
+        <div class="CENTER" id="timer">
+            <div id="timer-content">
+                <div id="timer-body">
+                    <span id="timer-value">
+                        <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
+                        <span>:</span>
+                        <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
+                        <span>:</span>
+                        <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
+                    </span>
+                    <span id="timer-value-msec" v-text="timeMS"></span>
+                </div>
+                <div id="timer-btns">
+                    <div id="btn0" v-on:click="clickBtn0Event" :class="{disabled: isBtn0Disabled}">
+                        <span class="content">{{ getBtn0Message }}</span>
+                        <span class="tooltiptext">{{ lang.timer_mode_blocked_warning }}</span>
+                    </div>
+                    <div id="btn1" v-on:click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
+                        <span class="content">{{ getBtn1Message }}</span>
+                        <span class="tooltiptext">{{ getBtn1Warning }}</span>
+                    </div>
+                    <div id="btn2" v-on:click="clickBtn2Event">
+                        <span class="content">{{ lang.reset }}</span>
+                        <span class="tooltiptext"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./script/app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,254 @@
+body {
+    font-family: Arial;
+    visibility: hidden;
+    transition: background-color, color 0.3s;
+}
+
+.dark {
+    background-color: black;
+    color: white;
+    visibility: visible;
+}
+
+.dark .dropdown-content {
+    background-color: #222;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dark .dropdown-content span:hover {
+    background-color: #333;
+}
+
+.dark .disabled {
+    background-color: gray !important;
+}
+
+.dark #timer-btns>* .tooltiptext {
+    background-color: white;
+    color: black;
+}
+
+.dark #timer-btns>* .tooltiptext::after {
+    border-color: transparent transparent white transparent;
+}
+
+.light {
+    background-color: white;
+    color: black;
+    visibility: visible;
+}
+
+.light .dropdown-content {
+    background-color: #DDD;
+    box-shadow: 0px 8px 16px 0px rgba(255, 255, 255, 0.2);
+}
+
+.light .dropdown-content span:hover {
+    background-color: #CCC;
+}
+
+.light .disabled {
+    background-color: #555 !important;
+}
+
+.light #timer-btns>* .tooltiptext {
+    background-color: #333;
+    color: white;
+}
+
+.light #timer-btns>* .tooltiptext::after {
+    border-color: transparent transparent #333 transparent;
+}
+
+#setting-area {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown img {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 100px;
+    overflow: auto;
+    z-index: 1;
+    top: 5px;
+    right: 48px;
+    border-radius: 15px;
+}
+
+.dropdown-content span {
+    padding: 10px 14px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.normal-icon {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    position: relative;
+}
+
+.normal-icon img{
+    height: 38px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    top: 5px;
+    left: 5px;
+}
+
+#timer {
+    width: 900px;
+    /* height: 400px; */
+}
+
+#timer-content {
+    width: 900px;
+    /* height: 440px; */
+}
+
+#timer-body {
+    /* margin-top: 40px; */
+    height: 270px;
+    margin-bottom: 50px;
+}
+
+#timer-value {
+    font-size: 200px;
+    /* line-height: 240px; */
+    display: block;
+    position: absolute;
+    right: 50px;
+}
+
+#timer-value span {
+    float: left;
+}
+
+#timer-value span[contenteditable] {
+    width: 230px;
+    text-align: center;
+    outline: none;
+    /* font-family: consolas; */
+}
+
+#timer-value-msec {
+    font-size: 100px;
+    display: block;
+    position: absolute;
+    right: 60px;
+    top: 185px;
+}
+
+#btn0 {
+    background-color: #00C;
+}
+
+#btn1 {
+    background-color: #0C0;
+}
+
+#btn2 {
+    background-color: #F00;
+}
+
+#timer-btns {
+    height: 90px;
+    /* max-height: 0; */
+    text-align: center;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    padding: 0 60px;
+}
+
+#timer-btns>* {
+    font-size: 30px;
+    font-weight: bolder;
+    border-radius: 16px;
+    cursor: pointer;
+    width: 190px;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    user-select: none;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    transition: background 0.5s;
+    position: relative;
+    color: white !important;
+}
+
+.CENTER {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.disabled {
+    cursor: not-allowed !important;
+}
+
+#timer-btns>* .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 9px 8px;
+    position: absolute;
+    z-index: 1;
+    top: 110%;
+    left: 50%;
+    margin-left: -82px;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+#timer-btns>* .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+}
+
+#timer-btns>.disabled:hover>.tooltiptext {
+    visibility: visible;
+}
