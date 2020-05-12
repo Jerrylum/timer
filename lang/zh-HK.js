@@ -10,6 +10,7 @@ useLanguage({
   change_language: '更改顯示語言',
   change_theme: '更改顏色主題',
   get_help: '取得幫助',
+  get_help_link: './intro/',
   hide_ui: '隱藏介面按鈕',
   theme: {
     dark: '暗黑',
