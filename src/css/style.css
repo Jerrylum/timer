@@ -160,9 +160,9 @@ body {
     top: 185px;
 }
 
-#btn0 {
+/* #btn0 {
     background-color: #00C;
-}
+} */
 
 #btn1 {
     background-color: #0C0;
@@ -185,9 +185,9 @@ body {
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-justify-content: space-between;
+    -webkit-justify-content: space-around;
     -ms-flex-pack: justify;
-    justify-content: space-between;
+    justify-content: space-around;
     -webkit-align-content: flex-start;
     -ms-flex-line-pack: start;
     align-content: flex-start;

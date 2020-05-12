@@ -38,8 +38,8 @@ class Timer {
         this._startTick = null;
         this._previousTicks = 0;
 
-        let { hour, minute, second, msec } = getTimerData();
-        this.set(hour, minute, second, msec);
+        // CountdownTimer -> _totalTicks; StopwatchTimer -> 0
+        this.set(this._totalTicks || 0);
     }
 
     get displayTicks() {

@@ -55,16 +55,12 @@
                     <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
                 </div>
                 <div id="timer-btns">
-                    <div id="btn0" v-on:click="clickBtn0Event" :class="{disabled: isBtn0Disabled}">
-                        <span class="content">{{ getBtn0Message }}</span>
-                        <span class="tooltiptext">{{ lang.timer_mode_blocked_warning }}</span>
-                    </div>
                     <div id="btn1" v-on:click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
                         <span class="content">{{ getBtn1Message }}</span>
                         <span class="tooltiptext">{{ getBtn1Warning }}</span>
                     </div>
                     <div id="btn2" v-on:click="clickBtn2Event">
-                        <span class="content">{{ lang.reset }}</span>
+                        <span class="content">{{ getBtn2Message }}</span>
                         <span class="tooltiptext"></span>
                     </div>
                 </div>

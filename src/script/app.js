@@ -25,12 +25,6 @@ vi = new Vue({
         ],
 
         t: rawTimer,
-        // timerEditableData: {
-        //     hour: 0,
-        //     minute: 0,
-        //     second: 0,
-        //     msec: 0
-        // },
         timerEditingFlag: {
             hour: false,
             minute: false,
@@ -57,7 +51,7 @@ vi = new Vue({
         BodyKeyDownEvent: function (e) {
             if (e.key === 'Tab' || e.key === 'Enter') {
                 let target_id = e.target.id;
-                if (target_id === 'hour' || target_id === 'minute' || target_id === 'second') {
+                if (target_id in getTimerData()) {
                     e.preventDefault();
 
                     let now = e.target;
@@ -70,34 +64,27 @@ vi = new Vue({
             }
         },
 
-        clickBtn0Event: function () {
-            if (this.t.status == TimerStatus.INIT) {
-                let oldClockTicks = this.t.displayTicks;
-                this.t = this.t instanceof CountdownTimer ? new StopwatchTimer() : new CountdownTimer();
-                this.t.set(oldClockTicks);
-            }
-        },
-
         clickBtn1Event: function () {
-            if (this.t.status == TimerStatus.INIT)
-                if ((this.t instanceof CountdownTimer) && (this.t.totalTicks == 0))
-                    return;
-                else
-                    this.t.start();
-            else if (this.t.status == TimerStatus.RUNNING)
+            if (this.t.status == TimerStatus.INIT) {
+                if (this.t.displayTicks == 0) {
+                    this.t = new StopwatchTimer();
+                } else {
+                    let oldTicks = this.t.displayTicks;
+
+                    this.t = new CountdownTimer();
+                    this.t.set(oldTicks);
+                }
+                this.t.start();
+            } else if (this.t.status == TimerStatus.RUNNING)
                 this.t.stop();
             else if (this.t.status == TimerStatus.PAUSE)
                 this.t.start();
         },
 
         clickBtn2Event: function () {
-            if (this.t instanceof StopwatchTimer) {
-                // if stopwatch, to 0
-                getAllEditableTimeValueField().forEach(x => {
-                    if (x.innerText - 0 != 0)
-                        x.innerText = "0"; // only set necessary field to 0, important
-                });
-            }
+            if (this.t.status == TimerStatus.INIT)
+                this.t.set(0);
+            else
             this.t.reset();
         },
 
@@ -156,10 +143,18 @@ vi = new Vue({
                 value_str = target.innerText = '0';
             }
 
+            if (target.id == "msec") {
+                value_str = value_str.slice(0, 3);
+            } else {
+                value_str = value_str.slice(0, 2);
+            }
+
             let value = Math.trunc(value_str);
             if (isNaN(value) || value_str.indexOf('.') !== -1) {
                 value = Math.trunc(target.beforeInput);
             }
+
+
 
             // update the data
             this.updateEditableDataAndHtml(target, value);
@@ -217,34 +212,29 @@ vi = new Vue({
         },
 
         timeMS: function () {
+            if (this.timerEditingFlag.msec) return '';
             if (this.t.status == TimerStatus.INIT) return '000';
 
             let time = Math.trunc(this.t.displayTicks % 1000);
             return time;
         },
 
-        isBtn0Disabled: function () {
-            return this.t.status != TimerStatus.INIT;
-        },
-
         isBtn1Disabled: function () {
             return this.t instanceof CountdownTimer ?
-                this.t.status == TimerStatus.TIMESUP || this.t.displayTicks == 0 :
+                this.t.status == TimerStatus.TIMESUP :
                 false;
         },
 
         getBtn1Warning: function () {
-            return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : lang.time_zero_warning;
-        },
-
-        getBtn0Message: function () {
-            return this.t instanceof CountdownTimer ?
-                lang.countdown :
-                lang.stopwatch
+            return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : '';
         },
 
         getBtn1Message: function () {
             return this.t.status == TimerStatus.RUNNING ? lang.pause : lang.start;
+        },
+
+        getBtn2Message: function () {
+            return this.t.status == TimerStatus.INIT ? lang.clear : lang.reset;
         },
 
         isEditable: function () {
