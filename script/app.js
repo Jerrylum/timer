@@ -19,16 +19,13 @@ vi = new Vue({
   data: {
     theme: rawTheme,
     themesList: ['dark', 'light'],
+    isHideOptional: false,
     t: rawTimer,
-    timerEditableData: {
-      hour: 0,
-      minute: 0,
-      second: 0
-    },
     timerEditingFlag: {
       hour: false,
       minute: false,
-      second: false
+      second: false,
+      msec: false
     }
   },
   watch: {
@@ -40,12 +37,15 @@ vi = new Vue({
     },
     theme: {
       handler: function handler() {
-        document.querySelector('body').className = this.theme;
+        document.body.className = this.theme;
         setCookie({
           theme: this.theme
         });
       },
       immediate: true
+    },
+    isHideOptional: function isHideOptional() {
+      document.body.style.cursor = this.isHideOptional ? 'none' : '';
     },
     timeS: function timeS() {
       document.title = "".concat(vi.timeH, ":").concat(vi.timeM, ":").concat(vi.timeS);
@@ -56,7 +56,7 @@ vi = new Vue({
       if (e.key === 'Tab' || e.key === 'Enter') {
         var target_id = e.target.id;
 
-        if (target_id === 'hour' || target_id === 'minute' || target_id === 'second') {
+        if (target_id in getTimerData()) {
           e.preventDefault();
           var now = e.target;
           var allFields = getAllEditableTimeValueField();
@@ -66,29 +66,30 @@ vi = new Vue({
         }
       }
     },
-    clickBtn0Event: function clickBtn0Event() {
-      if (this.t.status == TimerStatus.INIT) {
-        var oldClockTicks = this.t.displayTicks;
-        this.t = this.t instanceof CountdownTimer ? new StopwatchTimer() : new CountdownTimer();
-        this.t.set(oldClockTicks);
-      }
+    BodyMouseMoveEvent: function BodyMouseMoveEvent(e) {
+      if (!this.isHideOptional) return;
+      if (e.movementX > 1 || e.movementY > 1) this.isHideOptional = false;
     },
     clickBtn1Event: function clickBtn1Event() {
       if (this.t.status == TimerStatus.INIT) {
-        if (this.t instanceof CountdownTimer && this.t.totalTicks == 0) return;else this.t.start();
+        if (this.t.displayTicks == 0) {
+          this.t = new StopwatchTimer();
+        } else {
+          var oldTicks = this.t.displayTicks;
+          this.t = new CountdownTimer();
+          this.t.set(oldTicks);
+        }
+
+        this.t.start();
       } else if (this.t.status == TimerStatus.RUNNING) this.t.stop();else if (this.t.status == TimerStatus.PAUSE) this.t.start();
     },
     clickBtn2Event: function clickBtn2Event() {
-      if (this.t instanceof StopwatchTimer) {
-        // if stopwatch, to 0
-        this.timerEditableData = {
-          hour: 0,
-          minute: 0,
-          second: 0
-        };
+      if (this.t.status == TimerStatus.INIT) {
+        this.t.set(0);
+        this.updateTimerCookie(); // important
+      } else {
+        this.t.reset();
       }
-
-      this.t.reset();
     },
     updateEditableDataAndHtml: function updateEditableDataAndHtml(target, value) {
       if (target.id === 'hour') {
@@ -97,15 +98,20 @@ vi = new Vue({
         value = Math.max(0, Math.min(value, 59));
       } else if (target.id === 'second') {
         value = Math.max(0, Math.min(value, 59));
-      }
+      } else if (target.id === 'msec') {
+        value = Math.max(0, Math.min(value, 999));
+      } //this.timerEditableData[target.id] = value;
 
-      this.timerEditableData[target.id] = value;
+
       target.innerText = value;
-      var _this$timerEditableDa = this.timerEditableData,
-          hour = _this$timerEditableDa.hour,
-          minute = _this$timerEditableDa.minute,
-          second = _this$timerEditableDa.second;
-      this.t.set(hour, minute, second);
+
+      var _getTimerData = getTimerData(),
+          hour = _getTimerData.hour,
+          minute = _getTimerData.minute,
+          second = _getTimerData.second,
+          msec = _getTimerData.msec;
+
+      this.t.set(hour, minute, second, msec);
     },
     focusTimeValueFieldEvent: function focusTimeValueFieldEvent(e) {
       var target = e.target;
@@ -118,7 +124,7 @@ vi = new Vue({
       var value = Math.trunc(value_str);
       this.timerEditingFlag[target.id] = false; // important
 
-      if (value_str.length == 0 || value_str.length > 2 || isNaN(value) || value_str.indexOf('.') !== -1) {
+      if (value_str.length == 0 || isNaN(value) || value_str.indexOf('.') !== -1) {
         value = Math.trunc(target.beforeFocus);
       }
 
@@ -136,8 +142,12 @@ vi = new Vue({
 
       if (value_str.length == 0) {
         value_str = target.innerText = '0';
-      } else if (value_str.length > 2) {
-        value_str = target.innerText = value_str.slice(0, 2);
+      }
+
+      if (target.id == "msec") {
+        value_str = value_str.slice(0, 3);
+      } else {
+        value_str = value_str.slice(0, 2);
       }
 
       var value = Math.trunc(value_str);
@@ -193,24 +203,22 @@ vi = new Vue({
       return time > 9 ? time + '' : '0' + time;
     },
     timeMS: function timeMS() {
-      if (this.t.status == TimerStatus.INIT) return '000';
+      if (this.timerEditingFlag.msec) return '';
       var time = Math.trunc(this.t.displayTicks % 1000);
+      if (this.t.status == TimerStatus.INIT && time == 0) return '000';
       return time;
     },
-    isBtn0Disabled: function isBtn0Disabled() {
-      return this.t.status != TimerStatus.INIT;
-    },
     isBtn1Disabled: function isBtn1Disabled() {
-      return this.t instanceof CountdownTimer ? this.t.status == TimerStatus.TIMESUP || this.t.displayTicks == 0 : false;
+      return this.t instanceof CountdownTimer ? this.t.status == TimerStatus.TIMESUP : false;
     },
     getBtn1Warning: function getBtn1Warning() {
-      return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : lang.time_zero_warning;
-    },
-    getBtn0Message: function getBtn0Message() {
-      return this.t instanceof CountdownTimer ? lang.countdown : lang.stopwatch;
+      return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : '';
     },
     getBtn1Message: function getBtn1Message() {
       return this.t.status == TimerStatus.RUNNING ? lang.pause : lang.start;
+    },
+    getBtn2Message: function getBtn2Message() {
+      return this.t.status == TimerStatus.INIT ? lang.clear : lang.reset;
     },
     isEditable: function isEditable() {
       return this.t.status == TimerStatus.INIT || this.t.status == TimerStatus.PAUSE;

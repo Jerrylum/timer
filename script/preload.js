@@ -78,19 +78,16 @@ var Timer = /*#__PURE__*/function () {
 
   }, {
     key: "set",
-    value: function set(a, b, c) {
+    value: function set(a, b, c, d) {
       throw new Error("NotImplementedError");
     }
   }, {
     key: "reset",
     value: function reset() {
       this._startTick = null;
-      this._previousTicks = 0;
-      var _vi$timerEditableData = vi.timerEditableData,
-          hour = _vi$timerEditableData.hour,
-          minute = _vi$timerEditableData.minute,
-          second = _vi$timerEditableData.second;
-      this.set(hour, minute, second);
+      this._previousTicks = 0; // CountdownTimer -> _totalTicks; StopwatchTimer -> 0
+
+      this.set(this._totalTicks || 0);
     }
   }, {
     key: "displayTicks",
@@ -135,11 +132,11 @@ var StopwatchTimer = /*#__PURE__*/function (_Timer) {
     }
   }, {
     key: "set",
-    value: function set(a, b, c) {
-      if (b != null && c != null) a = a * 3600000 + b * 60000 + c * 1000;
+    value: function set(a, b, c, d) {
+      if (b != null && c != null && d != null) a = a * 3600000 + b * 60000 + c * 1000 + d;
 
       if (this.status == TimerStatus.PAUSE) {
-        this._initTicks = a + this.displayTicks % 1000 - 1; // keep ms
+        this._initTicks = a - 1; // keep ms
 
         this._previousTicks = 1; // keep pause mode
       } else {
@@ -190,11 +187,11 @@ var CountdownTimer = /*#__PURE__*/function (_Timer2) {
     }
   }, {
     key: "set",
-    value: function set(a, b, c) {
-      if (b != null && c != null) a = a * 3600000 + b * 60000 + c * 1000;
+    value: function set(a, b, c, d) {
+      if (b != null && c != null && d != null) a = a * 3600000 + b * 60000 + c * 1000 + d;
 
       if (this.status == TimerStatus.PAUSE) {
-        this._totalTicks = a + this.displayTicks % 1000 + 1; // keep ms
+        this._totalTicks = a + 1; // keep ms
 
         this._previousTicks = 1; // keep pause mode
       } else {
@@ -266,13 +263,23 @@ function getCookie() {
   var rtn = {};
   document.cookie.split(';').forEach(function (token) {
     var splited = token.split('=');
-    rtn[splited[0].trim()] = splited[1].trim();
+    if (splited.length > 1) rtn[splited[0].trim()] = splited[1].trim();
   });
   return rtn;
 }
 
 function getAllEditableTimeValueField() {
-  return _toConsumableArray(document.querySelectorAll('#timer-value > *[contenteditable]'));
+  return [].concat(_toConsumableArray(document.querySelectorAll('#timer-value > *[contenteditable]')), [document.querySelector('#msec')]);
+}
+
+function getTimerData() {
+  var fields = getAllEditableTimeValueField();
+  return {
+    hour: fields[0].innerText - 0,
+    minute: fields[1].innerText - 0,
+    second: fields[2].innerText - 0,
+    msec: fields[3].innerText - 0
+  };
 }
 
 (function () {
