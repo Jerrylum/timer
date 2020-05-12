@@ -1,179 +1,14 @@
 'use strict';
 
-class TimerStatus {
-    static INIT = Symbol();
-    static RUNNING = Symbol();
-    static PAUSE = Symbol();
-    static TIMESUP = Symbol();
-}
-
-class Timer {
-    constructor() {
-        this._previousTicks = 0;
-        this._startTick = null;
-    }
-
-    stop() {
-        if (this.isRunning) {
-            this._previousTicks += new Date().getTime() - this._startTick;
-            this._startTick = null;
-        }
-    }
-
-    start() {
-        throw new Error("NotImplementedError");
-    }
-
-    /**
-     * Set the time value of this timer
-     * @param {number} a Hour or tick
-     * @param {number} b Minute or undefined
-     * @param {number} c Second or undefined
-     */
-    set(a, b, c) {
-        throw new Error("NotImplementedError");
-    }
-
-    reset() {
-        this._startTick = null;
-        this._previousTicks = 0;
-
-        let { hour, minute, second } = vi.timerEditableData;
-        this.set(hour, minute, second);
-    }
-
-    get displayTicks() {
-        throw new Error("NotImplementedError");
-    }
-
-    get isRunning() {
-        return this.status == TimerStatus.RUNNING;
-    }
-
-    get status() {
-        throw new Error("NotImplementedError");
-    }
-}
-
-class StopwatchTimer extends Timer {
-    constructor() {
-        super();
-
-        this._initTicks = 0;
-    }
-
-    start() { // override
-        if (!this.isRunning)
-            this._startTick = new Date().getTime();
-    }
-
-    set(a, b, c) {
-        if (b != null && c != null)
-            a = a * 3600000 + b * 60000 + c * 1000;
-
-        if (this.status == TimerStatus.PAUSE) {
-            this._initTicks = a + this.displayTicks % 1000 - 1; // keep ms
-            this._previousTicks = 1; // keep pause mode
-        } else {
-            this._initTicks = a;
-        }
-    }
-
-    get displayTicks() {
-        return this.passedTicks;
-    }
-
-    get status() { // override
-        if (this._startTick == null && this._previousTicks == 0)
-            return TimerStatus.INIT;
-        else if (this._startTick == null && this._previousTicks != 0)
-            return TimerStatus.PAUSE;
-        else
-            return TimerStatus.RUNNING;
-    }
-
-    get passedTicks() {
-        return Math.max(
-            0,
-            (
-                this._startTick ?
-                    new Date().getTime() - this._startTick :
-                    0
-            ) +
-            this._initTicks + this._previousTicks
-        );
-    }
-}
-
-class CountdownTimer extends Timer {
-    constructor() {
-        super();
-
-        this._totalTicks = 0;
-    }
-
-    start() { // override
-        if (!this.isRunning && !this.isTimeup)
-            this._startTick = new Date().getTime();
-    }
-
-    set(a, b, c) {
-        if (b != null && c != null)
-            a = a * 3600000 + b * 60000 + c * 1000;
-
-        if (this.status == TimerStatus.PAUSE) {
-            this._totalTicks = a + this.displayTicks % 1000 + 1; // keep ms
-            this._previousTicks = 1; // keep pause mode
-        } else {
-            this._totalTicks = a;
-        }
-    }
-
-    get displayTicks() {
-        return this.remainingTicks;
-    }
-
-    get isTimeup() {
-        return this.status == TimerStatus.TIMESUP;
-    }
-
-    get status() { // override
-        if (this._startTick == null && this._previousTicks == 0)
-            return TimerStatus.INIT;
-        else if (this._startTick != null && this.remainingTicks != 0)
-            return TimerStatus.RUNNING;
-        else if (this._startTick == null && this._previousTicks != 0)
-            return TimerStatus.PAUSE;
-        else if (this.remainingTicks == 0)
-            return TimerStatus.TIMESUP;
-    }
-
-
-    get totalTicks() {
-        return this._totalTicks;
-    }
-
-    get remainingTicks() {
-        return Math.max(
-            0,
-            (
-                this._startTick ?
-                    this._startTick - new Date().getTime() :
-                    0
-            ) +
-            this._totalTicks - this._previousTicks
-        );
-    }
-
-}
-
-function getAllEditableTimeValueField() {
-    return [...document.querySelectorAll('#timer-value > *[contenteditable]')];
-}
-
-let vi = new Vue({
+vi = new Vue({
     el: '#thebody',
     mounted() {
+
+        setInterval(function () {
+            // HACK, manually update
+            if (vi.t) vi.t.__ob__.dep.notify();
+        }, 1);
+
         getAllEditableTimeValueField().forEach((x) => {
             x.addEventListener('focus', this.focusTimeValueFieldEvent, false);
             x.addEventListener('blur', this.blurTimeValueFieldEvent, false);
@@ -183,9 +18,13 @@ let vi = new Vue({
 
     },
     data: {
-        lang: lang,
-        languagesList: languagesList,
-        t: new CountdownTimer(),
+        theme: rawTheme,
+        themesList: [
+            'dark',
+            'light'
+        ],
+
+        t: rawTimer,
         timerEditableData: {
             hour: 0,
             minute: 0,
@@ -195,17 +34,19 @@ let vi = new Vue({
             hour: false,
             minute: false,
             second: false
-        },
-        themesList: ['dark', 'light'],
-        theme: 'dark'
+        }
     },
     watch: {
+        't._previousTicks': function () { this.updatTimereCookie() },
+        't._startTick': function () { this.updateTimerCookie() },
         theme: {
             handler: function () {
                 document.querySelector('body').className = this.theme;
+                setCookie({theme: this.theme});
             },
             immediate: true
         }
+
     },
     methods: {
         BodyKeyDownEvent: function (e) {
@@ -327,6 +168,16 @@ let vi = new Vue({
             sel.removeAllRanges();
             sel.addRange(newRange);
 
+        },
+
+        updateTimerCookie: function () {
+            setCookie({
+                timer_mode: this.t instanceof CountdownTimer ? 'countdown' : 'stopwatch',
+                timer_start_tick: this.t._startTick,
+                timer_previous_ticks: this.t._previousTicks,
+                timer_init_ticks: this.t._initTicks, // for stopwatch
+                timer_total_ticks: this.t._totalTicks // for countdown timer
+            });
         }
 
     },
@@ -337,6 +188,7 @@ let vi = new Vue({
 
         /**
          * when the flag == true, the user start typing. we should clear the content
+         * when the user start typing, the computed update will be suspended by Vue
          */
 
         timeH: function () {
@@ -396,8 +248,3 @@ let vi = new Vue({
         }
     }
 });
-
-setInterval(function () {
-    // HACK, manually update
-    vi.t.__ob__.dep.notify();
-}, 1);
