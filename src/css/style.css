@@ -110,6 +110,8 @@ body {
     display: inline-block;
     top: 5px;
     left: 5px;
+    max-height: 38px;
+    max-width: 38px;
 }
 
 #timer {

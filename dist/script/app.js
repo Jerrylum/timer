@@ -33,7 +33,7 @@ vi = new Vue({
   },
   watch: {
     't._previousTicks': function t_previousTicks() {
-      this.updatTimereCookie();
+      this.updateTimerCookie();
     },
     't._startTick': function t_startTick() {
       this.updateTimerCookie();
@@ -46,6 +46,9 @@ vi = new Vue({
         });
       },
       immediate: true
+    },
+    timeS: function timeS() {
+      document.title = "".concat(vi.timeH, ":").concat(vi.timeM, ":").concat(vi.timeS);
     }
   },
   methods: {

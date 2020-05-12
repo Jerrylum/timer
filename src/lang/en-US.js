@@ -11,6 +11,7 @@ useLanguage({
     change_language: 'Change language',
     change_theme: 'Change theme',
     get_help: 'Get help',
+    hide_ui: 'Hide buttons',
     theme: {
         dark: 'Dark',
         light: 'Light'

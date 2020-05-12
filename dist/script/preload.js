@@ -260,14 +260,12 @@ function setCookie(input) {
   Object.keys(input).forEach(function (key) {
     return document.cookie = "".concat(key, "=").concat(input[key], "; expires=").concat(expiryDate.toGMTString(), ";");
   });
-  console.log(document.cookie);
 }
 
 function getCookie() {
   var rtn = {};
   document.cookie.split(';').forEach(function (token) {
     var splited = token.split('=');
-    console.log(splited);
     rtn[splited[0].trim()] = splited[1].trim();
   });
   return rtn;

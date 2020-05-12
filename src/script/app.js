@@ -37,7 +37,7 @@ vi = new Vue({
         }
     },
     watch: {
-        't._previousTicks': function () { this.updatTimereCookie() },
+        't._previousTicks': function () { this.updateTimerCookie() },
         't._startTick': function () { this.updateTimerCookie() },
         theme: {
             handler: function () {
@@ -45,6 +45,9 @@ vi = new Vue({
                 setCookie({theme: this.theme});
             },
             immediate: true
+        },
+        timeS: function() {
+            document.title = `${vi.timeH}:${vi.timeM}:${vi.timeS}`
         }
 
     },

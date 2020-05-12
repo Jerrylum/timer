@@ -199,8 +199,6 @@ function setCookie(input) {
     Object.keys(input).forEach((key) =>
         document.cookie = `${key}=${input[key]}; expires=${expiryDate.toGMTString()};`
     );
-
-    console.log(document.cookie);
 }
 
 function getCookie() {
@@ -208,7 +206,6 @@ function getCookie() {
 
     document.cookie.split(';').forEach((token) => {
         let splited = token.split('=');
-        console.log(splited);
         rtn[splited[0].trim()] = splited[1].trim();
     });
 
