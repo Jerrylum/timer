@@ -52,7 +52,7 @@
                         <span>:</span>
                         <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
                     </span>
-                    <span id="timer-value-msec" v-text="timeMS"></span>
+                    <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
                 </div>
                 <div id="timer-btns">
                     <div id="btn0" v-on:click="clickBtn0Event" :class="{disabled: isBtn0Disabled}">

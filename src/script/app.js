@@ -25,15 +25,17 @@ vi = new Vue({
         ],
 
         t: rawTimer,
-        timerEditableData: {
-            hour: 0,
-            minute: 0,
-            second: 0
-        },
+        // timerEditableData: {
+        //     hour: 0,
+        //     minute: 0,
+        //     second: 0,
+        //     msec: 0
+        // },
         timerEditingFlag: {
             hour: false,
             minute: false,
-            second: false
+            second: false,
+            msec: false
         }
     },
     watch: {
@@ -42,11 +44,11 @@ vi = new Vue({
         theme: {
             handler: function () {
                 document.querySelector('body').className = this.theme;
-                setCookie({theme: this.theme});
+                setCookie({ theme: this.theme });
             },
             immediate: true
         },
-        timeS: function() {
+        timeS: function () {
             document.title = `${vi.timeH}:${vi.timeM}:${vi.timeS}`
         }
 
@@ -91,11 +93,10 @@ vi = new Vue({
         clickBtn2Event: function () {
             if (this.t instanceof StopwatchTimer) {
                 // if stopwatch, to 0
-                this.timerEditableData = {
-                    hour: 0,
-                    minute: 0,
-                    second: 0
-                };
+                getAllEditableTimeValueField().forEach(x => {
+                    if (x.innerText - 0 != 0)
+                        x.innerText = "0"; // only set necessary field to 0, important
+                });
             }
             this.t.reset();
         },
@@ -108,12 +109,14 @@ vi = new Vue({
                 value = Math.max(0, Math.min(value, 59));
             } else if (target.id === 'second') {
                 value = Math.max(0, Math.min(value, 59));
+            } else if (target.id === 'msec') {
+                value = Math.max(0, Math.min(value, 999));
             }
-            this.timerEditableData[target.id] = value;
+            //this.timerEditableData[target.id] = value;
             target.innerText = value;
 
-            let { hour, minute, second } = this.timerEditableData;
-            this.t.set(hour, minute, second);
+            let { hour, minute, second, msec } = getTimerData();
+            this.t.set(hour, minute, second, msec);
         },
 
         focusTimeValueFieldEvent: function (e) {
@@ -132,7 +135,7 @@ vi = new Vue({
             this.timerEditingFlag[target.id] = false;
 
             // important
-            if (value_str.length == 0 || value_str.length > 2 || isNaN(value) || value_str.indexOf('.') !== -1) {
+            if (value_str.length == 0 || isNaN(value) || value_str.indexOf('.') !== -1) {
                 value = Math.trunc(target.beforeFocus);
             }
             this.updateEditableDataAndHtml(target, value);
@@ -151,8 +154,6 @@ vi = new Vue({
 
             if (value_str.length == 0) {
                 value_str = target.innerText = '0';
-            } else if (value_str.length > 2) {
-                value_str = target.innerText = value_str.slice(0, 2);
             }
 
             let value = Math.trunc(value_str);
@@ -248,6 +249,8 @@ vi = new Vue({
 
         isEditable: function () {
             return this.t.status == TimerStatus.INIT || this.t.status == TimerStatus.PAUSE;
-        }
+        },
+
+
     }
 });

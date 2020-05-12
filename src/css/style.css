@@ -97,19 +97,22 @@ body {
 }
 
 .normal-icon {
-    display: inline-block;
+    display: block;
     width: 48px;
     height: 48px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.normal-icon a {
+    height: 38px;
+    width: 38px;
 }
 
 .normal-icon img{
-    height: 38px;
     cursor: pointer;
-    position: relative;
-    display: inline-block;
-    top: 5px;
-    left: 5px;
     max-height: 38px;
     max-width: 38px;
 }
@@ -149,7 +152,7 @@ body {
     /* font-family: consolas; */
 }
 
-#timer-value-msec {
+#msec {
     font-size: 100px;
     display: block;
     position: absolute;
