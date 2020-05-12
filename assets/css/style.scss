@@ -1,0 +1,9 @@
+@import "{{ site.theme }}";
+
+code, pre {
+    background-color: #EEE;
+    padding: 2px 5px;
+    border-radius: 5px;
+    margin: 0 2px;
+    white-space: nowrap;
+}
