@@ -10,6 +10,7 @@ useLanguage({
   change_language: 'Change language',
   change_theme: 'Change theme',
   get_help: 'Get help',
+  get_help_link: './intro/en',
   hide_ui: 'Hide buttons',
   theme: {
     dark: 'Dark',
