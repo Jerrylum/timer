@@ -1,7 +1,21 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: Arial;
     visibility: hidden;
     transition: background-color, color 0.3s;
+    min-height: 100%;
+    margin: 0;
+}
+
+.hide-optional {
+    cursor: none;
+}
+
+.hide-optional .optional{
+    display: none !important;
 }
 
 .dark {
@@ -158,6 +172,8 @@ body {
     position: absolute;
     right: 60px;
     top: 185px;
+    width: 180px;
+    text-align: right;
 }
 
 /* #btn0 {

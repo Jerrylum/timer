@@ -23,7 +23,7 @@ vi = new Vue({
             'dark',
             'light'
         ],
-
+        isHideOptional: false,
         t: rawTimer,
         timerEditingFlag: {
             hour: false,
@@ -37,10 +37,13 @@ vi = new Vue({
         't._startTick': function () { this.updateTimerCookie() },
         theme: {
             handler: function () {
-                document.querySelector('body').className = this.theme;
+                document.body.className = this.theme;
                 setCookie({ theme: this.theme });
             },
             immediate: true
+        },
+        isHideOptional: function() {
+            document.body.style.cursor = this.isHideOptional ? 'none' : '';
         },
         timeS: function () {
             document.title = `${vi.timeH}:${vi.timeM}:${vi.timeS}`
@@ -64,6 +67,12 @@ vi = new Vue({
             }
         },
 
+        BodyMouseMoveEvent: function (e) {
+            if (!this.isHideOptional) return;
+
+            if (e.movementX > 1 || e.movementY > 1) this.isHideOptional = false;
+        },
+
         clickBtn1Event: function () {
             if (this.t.status == TimerStatus.INIT) {
                 if (this.t.displayTicks == 0) {
@@ -82,10 +91,12 @@ vi = new Vue({
         },
 
         clickBtn2Event: function () {
-            if (this.t.status == TimerStatus.INIT)
+            if (this.t.status == TimerStatus.INIT){
                 this.t.set(0);
-            else
-            this.t.reset();
+                this.updateTimerCookie(); // important
+            } else {
+                this.t.reset();
+            }
         },
 
 
@@ -213,9 +224,10 @@ vi = new Vue({
 
         timeMS: function () {
             if (this.timerEditingFlag.msec) return '';
-            if (this.t.status == TimerStatus.INIT) return '000';
 
             let time = Math.trunc(this.t.displayTicks % 1000);
+
+            if (this.t.status == TimerStatus.INIT && time == 0) return '000';
             return time;
         },
 

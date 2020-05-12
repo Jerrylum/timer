@@ -19,29 +19,8 @@
 </head>
 
 <body>
-    <div id="thebody" @keydown="BodyKeyDownEvent">
-        <div id="setting-area">
-            <div class="normal-icon dropdown">
-                <img src="./img/language.svg" :title="lang.change_language">
-                <div id="change-language" class="dropdown-content">
-                    <span v-for="(name, code, index) in languagesList" v-on:click="loadLanguage(code)">{{ name }}</span>
-                </div>
-            </div>
-            <div class="normal-icon dropdown">
-                <img src="./img/theme.svg" :title="lang.change_theme">
-                <div id="change-theme" class="dropdown-content">
-                    <span v-for="code in themesList" v-on:click="theme=code">{{ lang.theme[code] }}</span>
-                </div>
-            </div>
-            <div class="normal-icon">
-                <img src="./img/hide.svg" :title="lang.hide_ui">
-            </div>
-            <div class="normal-icon">
-                <a href="./intro" target="_blank">
-                    <img src="./img/question.svg" :title="lang.get_help">
-                </a>
-            </div>
-        </div>
+    <div id="thebody" @keydown="BodyKeyDownEvent" @mousemove="BodyMouseMoveEvent"
+        :class="{'hide-optional': isHideOptional}">
         <div class="CENTER" id="timer">
             <div id="timer-content">
                 <div id="timer-body">
@@ -54,16 +33,38 @@
                     </span>
                     <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
                 </div>
-                <div id="timer-btns">
-                    <div id="btn1" v-on:click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
+                <div id="timer-btns" class="optional">
+                    <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
                         <span class="content">{{ getBtn1Message }}</span>
                         <span class="tooltiptext">{{ getBtn1Warning }}</span>
                     </div>
-                    <div id="btn2" v-on:click="clickBtn2Event">
+                    <div id="btn2" @click="clickBtn2Event">
                         <span class="content">{{ getBtn2Message }}</span>
                         <span class="tooltiptext"></span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="setting-area" class="optional">
+            <div class="normal-icon dropdown">
+                <img src="./img/language.svg" :title="lang.change_language">
+                <div id="change-language" class="dropdown-content">
+                    <span v-for="(name, code, index) in languagesList" @click="loadLanguage(code)">{{ name }}</span>
+                </div>
+            </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/theme.svg" :title="lang.change_theme">
+                <div id="change-theme" class="dropdown-content">
+                    <span v-for="code in themesList" @click="theme=code">{{ lang.theme[code] }}</span>
+                </div>
+            </div>
+            <div class="normal-icon">
+                <img src="./img/hide.svg" :title="lang.hide_ui" @click="isHideOptional = true;">
+            </div>
+            <div class="normal-icon">
+                <a href="./intro" target="_blank">
+                    <img src="./img/question.svg" :title="lang.get_help">
+                </a>
             </div>
         </div>
     </div>

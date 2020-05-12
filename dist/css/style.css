@@ -1,7 +1,21 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: Arial;
     visibility: hidden;
     transition: background-color, color 0.3s;
+    min-height: 100%;
+    margin: 0;
+}
+
+.hide-optional {
+    cursor: none;
+}
+
+.hide-optional .optional{
+    display: none !important;
 }
 
 .dark {
@@ -97,19 +111,22 @@ body {
 }
 
 .normal-icon {
-    display: inline-block;
+    display: block;
     width: 48px;
     height: 48px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.normal-icon a {
+    height: 38px;
+    width: 38px;
 }
 
 .normal-icon img{
-    height: 38px;
     cursor: pointer;
-    position: relative;
-    display: inline-block;
-    top: 5px;
-    left: 5px;
     max-height: 38px;
     max-width: 38px;
 }
@@ -149,17 +166,19 @@ body {
     /* font-family: consolas; */
 }
 
-#timer-value-msec {
+#msec {
     font-size: 100px;
     display: block;
     position: absolute;
     right: 60px;
     top: 185px;
+    width: 180px;
+    text-align: right;
 }
 
-#btn0 {
+/* #btn0 {
     background-color: #00C;
-}
+} */
 
 #btn1 {
     background-color: #0C0;
@@ -182,9 +201,9 @@ body {
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-justify-content: space-between;
+    -webkit-justify-content: space-around;
     -ms-flex-pack: justify;
-    justify-content: space-between;
+    justify-content: space-around;
     -webkit-align-content: flex-start;
     -ms-flex-line-pack: start;
     align-content: flex-start;
