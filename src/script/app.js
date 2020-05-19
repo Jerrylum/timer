@@ -205,6 +205,7 @@ vi = new Vue({
             if (this.timerEditingFlag.hour) return '';
 
             let time = Math.trunc(this.t.displayTicks / 3600000);
+            time %= 100;
             return time > 9 ? time + '' : '0' + time;
         },
 
