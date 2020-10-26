@@ -15,21 +15,21 @@
     <script src="./script/polyfill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
     <script src="./script/preload.js"></script>
+    <script src="./script/language.js"></script>
     <script src="./lang/en-US.js"></script>
 </head>
 
 <body>
-    <div id="thebody" @keydown="BodyKeyDownEvent" @mousemove="BodyMouseMoveEvent"
-        :class="{'hide-optional': isHideOptional}">
+    <div id="thebody" @keydown="BodyKeyDownEvent" @mousemove="BodyMouseMoveEvent" :class="{'hide-optional': isHideOptional}">
         <div class="CENTER" id="timer">
             <div id="timer-content">
                 <div id="timer-body">
                     <span id="timer-value">
-                        <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
-                        <span>:</span>
-                        <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
-                        <span>:</span>
-                        <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
+                    <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
+                    <span>:</span>
+                    <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
+                    <span>:</span>
+                    <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
                     </span>
                     <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
                 </div>

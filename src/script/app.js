@@ -1,10 +1,26 @@
 'use strict';
 
-vi = new Vue({
+let vi = new Vue({
     el: '#thebody',
     mounted() {
+        let cookie = getCookie();
 
-        setInterval(function () {
+        this.theme = cookie.theme || this.theme;
+
+        if (cookie.timer_mode) {
+            if (cookie.timer_mode == 'countdown') {
+                this.t = new CountdownTimer();
+                this.t._totalTicks = Math.trunc(cookie.timer_total_ticks) || 0;
+            } else {
+                this.t = new StopwatchTimer();
+                this.t._initTicks = Math.trunc(cookie.timer_init_ticks) || 0;
+            }
+
+            this.t._startTick = Math.trunc(cookie.timer_start_tick) || null;
+            this.t._previousTicks = Math.trunc(cookie.timer_previous_ticks) || 0;
+        }
+
+        setInterval(function() {
             // HACK, manually update
             if (vi.t) vi.t.__ob__.dep.notify();
         }, 1);
@@ -18,13 +34,13 @@ vi = new Vue({
 
     },
     data: {
-        theme: rawTheme,
+        theme: 'dark',
         themesList: [
             'dark',
             'light'
         ],
         isHideOptional: false,
-        t: rawTimer,
+        t: new CountdownTimer(),
         timerEditingFlag: {
             hour: false,
             minute: false,
@@ -33,10 +49,10 @@ vi = new Vue({
         }
     },
     watch: {
-        't._previousTicks': function () { this.updateTimerCookie() },
-        't._startTick': function () { this.updateTimerCookie() },
+        't._previousTicks': function() { this.updateTimerCookie() },
+        't._startTick': function() { this.updateTimerCookie() },
         theme: {
-            handler: function () {
+            handler: function() {
                 document.body.className = this.theme;
                 setCookie({ theme: this.theme });
             },
@@ -45,13 +61,13 @@ vi = new Vue({
         isHideOptional: function() {
             document.body.style.cursor = this.isHideOptional ? 'none' : '';
         },
-        timeS: function () {
+        timeS: function() {
             document.title = `${vi.timeH}:${vi.timeM}:${vi.timeS}`
         }
 
     },
     methods: {
-        BodyKeyDownEvent: function (e) {
+        BodyKeyDownEvent: function(e) {
             if (e.key === 'Tab' || e.key === 'Enter') {
                 let target_id = e.target.id;
                 if (target_id in getTimerData()) {
@@ -67,13 +83,13 @@ vi = new Vue({
             }
         },
 
-        BodyMouseMoveEvent: function (e) {
+        BodyMouseMoveEvent: function(e) {
             if (!this.isHideOptional) return;
 
             if (e.movementX > 1 || e.movementY > 1) this.isHideOptional = false;
         },
 
-        clickBtn1Event: function () {
+        clickBtn1Event: function() {
             if (this.t.status == TimerStatus.INIT) {
                 if (this.t.displayTicks == 0) {
                     this.t = new StopwatchTimer();
@@ -90,8 +106,8 @@ vi = new Vue({
                 this.t.start();
         },
 
-        clickBtn2Event: function () {
-            if (this.t.status == TimerStatus.INIT){
+        clickBtn2Event: function() {
+            if (this.t.status == TimerStatus.INIT) {
                 this.t.set(0);
                 this.updateTimerCookie(); // important
             } else {
@@ -100,7 +116,7 @@ vi = new Vue({
         },
 
 
-        updateEditableDataAndHtml: function (target, value) {
+        updateEditableDataAndHtml: function(target, value) {
             if (target.id === 'hour') {
                 value = Math.max(0, Math.min(value, 99));
             } else if (target.id === 'minute') {
@@ -117,7 +133,7 @@ vi = new Vue({
             this.t.set(hour, minute, second, msec);
         },
 
-        focusTimeValueFieldEvent: function (e) {
+        focusTimeValueFieldEvent: function(e) {
             let target = e.target;
 
             this.timerEditingFlag[target.id] = true;
@@ -125,7 +141,7 @@ vi = new Vue({
             target.beforeFocus = target.innerText;
         },
 
-        blurTimeValueFieldEvent: function (e) {
+        blurTimeValueFieldEvent: function(e) {
             let target = e.target;
             let value_str = target.innerText;
             let value = Math.trunc(value_str);
@@ -139,11 +155,11 @@ vi = new Vue({
             this.updateEditableDataAndHtml(target, value);
         },
 
-        b4changedTimeValueFieldEvent: function (e) {
+        b4changedTimeValueFieldEvent: function(e) {
             e.target.beforeInput = e.target.innerText;
         },
 
-        changedTimeValueFieldEvent: function (e) {
+        changedTimeValueFieldEvent: function(e) {
             let sel = window.getSelection();
             let startOffset = sel.getRangeAt(0).startOffset; // the orignal
 
@@ -180,7 +196,7 @@ vi = new Vue({
 
         },
 
-        updateTimerCookie: function () {
+        updateTimerCookie: function() {
             setCookie({
                 timer_mode: this.t instanceof CountdownTimer ? 'countdown' : 'stopwatch',
                 timer_start_tick: this.t._startTick,
@@ -192,7 +208,7 @@ vi = new Vue({
 
     },
     computed: {
-        displayTicks: function () {
+        displayTicks: function() {
             return t.displayTicks;
         },
 
@@ -201,7 +217,7 @@ vi = new Vue({
          * when the user start typing, the computed update will be suspended by Vue
          */
 
-        timeH: function () {
+        timeH: function() {
             if (this.timerEditingFlag.hour) return '';
 
             let time = Math.trunc(this.t.displayTicks / 3600000);
@@ -209,48 +225,50 @@ vi = new Vue({
             return time > 9 ? time + '' : '0' + time;
         },
 
-        timeM: function () {
+        timeM: function() {
             if (this.timerEditingFlag.minute) return '';
 
             let time = Math.trunc(this.t.displayTicks % 3600000 / 60000);
             return time > 9 ? time + '' : '0' + time;
         },
 
-        timeS: function () {
+        timeS: function() {
             if (this.timerEditingFlag.second) return '';
 
             let time = Math.trunc(this.t.displayTicks % 60000 / 1000);
             return time > 9 ? time + '' : '0' + time;
         },
 
-        timeMS: function () {
+        timeMS: function() {
             if (this.timerEditingFlag.msec) return '';
 
             let time = Math.trunc(this.t.displayTicks % 1000);
 
-            if (this.t.status == TimerStatus.INIT && time == 0) return '000';
-            return time;
+            if (this.t.status == TimerStatus.INIT && time == 0)
+                return '000';
+            else
+                return time;
         },
 
-        isBtn1Disabled: function () {
+        isBtn1Disabled: function() {
             return this.t instanceof CountdownTimer ?
                 this.t.status == TimerStatus.TIMESUP :
                 false;
         },
 
-        getBtn1Warning: function () {
+        getBtn1Warning: function() {
             return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : '';
         },
 
-        getBtn1Message: function () {
+        getBtn1Message: function() {
             return this.t.status == TimerStatus.RUNNING ? lang.pause : lang.start;
         },
 
-        getBtn2Message: function () {
+        getBtn2Message: function() {
             return this.t.status == TimerStatus.INIT ? lang.clear : lang.reset;
         },
 
-        isEditable: function () {
+        isEditable: function() {
             return this.t.status == TimerStatus.INIT || this.t.status == TimerStatus.PAUSE;
         },
 

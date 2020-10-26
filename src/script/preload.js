@@ -167,31 +167,6 @@ class CountdownTimer extends Timer {
 
 }
 
-
-let lang;
-let languagesList = {
-    "en-US": "English",
-    "zh-HK": "繁體中文"
-};
-
-let rawTheme = 'dark';
-let rawTimer = new CountdownTimer();
-
-let vi;
-
-function loadLanguage(code) {
-    let fileref = document.createElement('script');
-    fileref.setAttribute('src', './lang/' + code + '.js');
-
-    document.getElementsByTagName("head")[0].appendChild(fileref);
-}
-
-function useLanguage(newLang) {
-    lang = lang == undefined ? newLang : Object.assign(lang, newLang);
-    setCookie({ lang: lang.name });
-}
-
-
 function setCookie(input) {
     var expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
@@ -225,49 +200,3 @@ function getTimerData() {
         msec: fields[3].innerText - 0
     };
 }
-
-(function() {
-    let cookie = getCookie();
-
-    // language
-
-    let code = cookie.lang;
-
-    if (code == undefined) {
-        let language = window.navigator.userLanguage || window.navigator.language;
-
-        let check = function(r) {
-            return r.test(language);
-        }
-
-        switch (true) {
-            case check(/yue.*/):
-            case check(/zh.*/):
-                code = "zh-HK";
-                break;
-        }
-    }
-
-    if (code != undefined) loadLanguage(code); // no need to loadLanguage, english auto load
-
-    // theme
-
-    rawTheme = cookie.theme || rawTheme;
-
-    // timer
-
-    if (cookie.timer_mode) {
-        if (cookie.timer_mode == 'countdown') {
-            rawTimer = new CountdownTimer();
-            rawTimer._totalTicks = Math.trunc(cookie.timer_total_ticks) || 0;
-        } else {
-            rawTimer = new StopwatchTimer();
-            rawTimer._initTicks = Math.trunc(cookie.timer_init_ticks) || 0;
-        }
-
-        rawTimer._startTick = Math.trunc(cookie.timer_start_tick) || null;
-        rawTimer._previousTicks = Math.trunc(cookie.timer_previous_ticks) || 0;
-    }
-
-
-})();
