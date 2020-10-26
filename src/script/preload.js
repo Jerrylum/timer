@@ -197,7 +197,7 @@ function setCookie(input) {
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
 
     Object.keys(input).forEach((key) =>
-        document.cookie = `${key}=${input[key]}; expires=${expiryDate.toGMTString()};`
+        document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(input[key])}; expires=${expiryDate.toGMTString()};`
     );
 }
 
