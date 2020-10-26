@@ -97,8 +97,8 @@ class StopwatchTimer extends Timer {
             0,
             (
                 this._startTick ?
-                    new Date().getTime() - this._startTick :
-                    0
+                new Date().getTime() - this._startTick :
+                0
             ) +
             this._initTicks + this._previousTicks
         );
@@ -158,8 +158,8 @@ class CountdownTimer extends Timer {
             0,
             (
                 this._startTick ?
-                    this._startTick - new Date().getTime() :
-                    0
+                this._startTick - new Date().getTime() :
+                0
             ) +
             this._totalTicks - this._previousTicks
         );
@@ -188,7 +188,7 @@ function loadLanguage(code) {
 
 function useLanguage(newLang) {
     lang = lang == undefined ? newLang : Object.assign(lang, newLang);
-    setCookie({lang: lang.name});
+    setCookie({ lang: lang.name });
 }
 
 
@@ -202,15 +202,14 @@ function setCookie(input) {
 }
 
 function getCookie() {
-    let rtn = {};
-
-    document.cookie.split(';').forEach((token) => {
-        let splited = token.split('=');
-        if (splited.length > 1)
-            rtn[splited[0].trim()] = splited[1].trim();
-    });
-
-    return rtn;
+    return document.cookie
+        .split(';')
+        .map(v => v.split('='))
+        .reduce((acc, v) => {
+            if (v.length != 1)
+                acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+            return acc;
+        }, {});
 }
 
 function getAllEditableTimeValueField() {
@@ -227,7 +226,7 @@ function getTimerData() {
     };
 }
 
-(function () {
+(function() {
     let cookie = getCookie();
 
     // language
@@ -237,7 +236,7 @@ function getTimerData() {
     if (code == undefined) {
         let language = window.navigator.userLanguage || window.navigator.language;
 
-        let check = function (r) {
+        let check = function(r) {
             return r.test(language);
         }
 
