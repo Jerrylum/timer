@@ -4,7 +4,7 @@
   "description": "No ads, an online timer created by Jerrylum, better than online-stopwatch.com",
   "main": "deploy.js",
   "scripts": {
-    "compile": "node deploy.js && babel src --out-dir dist",
+    "compile": "node deploy.js && babel src --out-dir dist && terser-folder dist -o dist -e -x .js",
     "upload": "git checkout master && git subtree split --prefix dist -b gh-pages && git push -f origin gh-pages:gh-pages && git branch -D gh-pages"
   },
   "keywords": [
@@ -22,6 +22,7 @@
     "ncp": "^2.0.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.8.7"
+    "@babel/polyfill": "^7.8.7",
+    "terser-folder": "^2.0.0"
   }
 }
