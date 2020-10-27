@@ -51,7 +51,7 @@
             <div class="normal-icon dropdown">
                 <img src="./img/language.svg" :title="lang.change_language">
                 <div id="change-language" class="dropdown-content">
-                    <span v-for="(name, code, index) in languagesList" @click="loadLanguage(code)">{{ name }}</span>
+                    <span v-for="(name, code, index) in i18n.languages" @click="i18n.load(code)">{{ name }}</span>
                 </div>
             </div>
             <div class="normal-icon dropdown">

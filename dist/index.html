@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div id="thebody" @keydown="BodyKeyDownEvent" @mousemove="BodyMouseMoveEvent" :class="{'hide-optional': vuePanel.isHideOptional}">
+    <div id="thebody" @keydown="BodyKeyDownEvent" :class="{'hide-optional': vuePanel.isHideOptional}">
         <div class="CENTER" id="timer">
             <div id="timer-content">
                 <div id="timer-body">
@@ -46,26 +46,28 @@
             </div>
         </div>
     </div>
-    <div id="setting-panel" class="optional">
-        <div class="normal-icon dropdown">
-            <img src="./img/language.svg" :title="lang.change_language">
-            <div id="change-language" class="dropdown-content">
-                <span v-for="(name, code, index) in languagesList" @click="loadLanguage(code)">{{ name }}</span>
+    <div id="setting-panel" :class="{'hide-optional': isHideOptional}">
+        <div class="optional">
+            <div class="normal-icon dropdown">
+                <img src="./img/language.svg" :title="lang.change_language">
+                <div id="change-language" class="dropdown-content">
+                    <span v-for="(name, code, index) in i18n.languages" @click="i18n.load(code)">{{ name }}</span>
+                </div>
             </div>
-        </div>
-        <div class="normal-icon dropdown">
-            <img src="./img/theme.svg" :title="lang.change_theme">
-            <div id="change-theme" class="dropdown-content">
-                <span v-for="code in themesList" @click="theme=code">{{ lang.theme[code] }}</span>
+            <div class="normal-icon dropdown">
+                <img src="./img/theme.svg" :title="lang.change_theme">
+                <div id="change-theme" class="dropdown-content">
+                    <span v-for="code in themesList" @click="theme=code">{{ lang.theme[code] }}</span>
+                </div>
             </div>
-        </div>
-        <div class="normal-icon">
-            <img src="./img/hide.svg" :title="lang.hide_ui" @click="isHideOptional = true;">
-        </div>
-        <div class="normal-icon">
-            <a :href="lang.get_help_link" target="_blank">
-                <img src="./img/question.svg" :title="lang.get_help">
-            </a>
+            <div class="normal-icon">
+                <img src="./img/hide.svg" :title="lang.hide_ui" @click="isHideOptional = true;">
+            </div>
+            <div class="normal-icon">
+                <a :href="lang.get_help_link" target="_blank">
+                    <img src="./img/question.svg" :title="lang.get_help">
+                </a>
+            </div>
         </div>
     </div>
     <script src="./script/vue-panel.js"></script>

@@ -3,6 +3,8 @@
 let vuePanel = new Vue({
     el: '#setting-panel',
     mounted() {
+        i18n.addComponent(this);
+
         let cookie = getCookie();
 
         this.theme = cookie.theme || this.theme;

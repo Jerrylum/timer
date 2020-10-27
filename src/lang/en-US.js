@@ -1,4 +1,4 @@
-useLanguage({
+i18n.use({
     name: 'en-US',
     start: 'Start',
     pause: 'Pause',

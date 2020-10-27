@@ -3,6 +3,8 @@
 let vueTimer = new Vue({
     el: '#thebody',
     mounted() {
+        i18n.addComponent(this);
+
         let cookie = getCookie();
 
         if (cookie.timer_mode) {
