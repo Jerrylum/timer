@@ -1,6 +1,6 @@
 "use strict";
 
-useLanguage({
+i18n.use({
   name: 'zh-HK',
   start: '開始',
   pause: '暫停',
