@@ -20,27 +20,29 @@
 </head>
 
 <body>
-    <div id="thebody" @keydown="BodyKeyDownEvent" :class="{'hide-optional': vuePanel.isHideOptional}">
-        <div class="CENTER" id="timer">
-            <div id="timer-content">
-                <div id="timer-body">
-                    <span id="timer-value">
-                    <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
-                    <span>:</span>
-                    <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
-                    <span>:</span>
-                    <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
-                    </span>
-                    <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
-                </div>
-                <div id="timer-btns" class="optional">
-                    <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
-                        <span class="content">{{ getBtn1Message }}</span>
-                        <span class="tooltiptext">{{ getBtn1Warning }}</span>
+    <div id="thebody" @keydown="BodyKeyDownEvent" :class="{'hide-optional': vuePanel.isHideOptional}" class="center">
+        <div class="middle">
+            <div class="inner" id="timer">
+                <div id="timer-content">
+                    <div id="timer-body">
+                        <span id="timer-value">
+                        <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
+                        <span>:</span>
+                        <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
+                        <span>:</span>
+                        <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
+                        </span>
+                        <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
                     </div>
-                    <div id="btn2" @click="clickBtn2Event">
-                        <span class="content">{{ getBtn2Message }}</span>
-                        <span class="tooltiptext"></span>
+                    <div id="timer-btns" class="optional">
+                        <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
+                            <span class="content">{{ getBtn1Message }}</span>
+                            <span class="tooltiptext">{{ getBtn1Warning }}</span>
+                        </div>
+                        <div id="btn2" @click="clickBtn2Event">
+                            <span class="content">{{ getBtn2Message }}</span>
+                            <span class="tooltiptext"></span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -80,11 +80,32 @@ body {
     border-color: transparent transparent #333 transparent;
 }
 
-#setting-panel {
-    position: fixed;
-    top: 10px;
-    right: 10px;
+
+/* Add-On */
+
+.center {
+    display: table;
+    position: relative;
+    top: 0;
+    left: 0;
 }
+
+.center .middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.center .inner {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.disabled {
+    cursor: not-allowed !important;
+}
+
+
+/* Component */
 
 .dropdown {
     position: relative;
@@ -138,9 +159,24 @@ body {
     max-width: 38px;
 }
 
+
+/* By-Id */
+
+#setting-panel {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
+#thebody {
+    width: 100vw;
+    height: 100vh;
+}
+
 #timer {
     width: 900px;
     /* height: 400px; */
+    position: relative;
 }
 
 #timer-content {
@@ -182,11 +218,6 @@ body {
     width: 180px;
     text-align: right;
 }
-
-
-/* #btn0 {
-    background-color: #00C;
-} */
 
 #btn1 {
     background-color: #0C0;
@@ -240,17 +271,6 @@ body {
     transition: background 0.5s;
     position: relative;
     color: white !important;
-}
-
-.CENTER {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.disabled {
-    cursor: not-allowed !important;
 }
 
 #timer-btns>* .tooltiptext {
