@@ -65,12 +65,6 @@ let vueTimer = new Vue({
             }
         },
 
-        BodyMouseMoveEvent: function(e) {
-            if (!vuePanel.isHideOptional) return;
-
-            if (e.movementX > 1 || e.movementY > 1) vuePanel.isHideOptional = false;
-        },
-
         clickBtn1Event: function() {
             if (this.t.status == TimerStatus.INIT) {
                 if (this.t.displayTicks == 0) {

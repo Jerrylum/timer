@@ -6,6 +6,12 @@ let vuePanel = new Vue({
         let cookie = getCookie();
 
         this.theme = cookie.theme || this.theme;
+
+        document.body.addEventListener("mousemove", (e) => {
+            if (!this.isHideOptional) return;
+
+            if (e.movementX > 2 || e.movementY > 2) this.isHideOptional = false;
+        });
     },
     data: {
         isHideOptional: false,
