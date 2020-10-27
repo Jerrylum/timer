@@ -14,6 +14,10 @@ let vuePanel = new Vue({
 
             if (e.movementX > 2 || e.movementY > 2) this.isHideOptional = false;
         });
+
+        document.addEventListener("fullscreenchange", () => {
+            this.$forceUpdate();
+        });
     },
     data: {
         isHideOptional: false,
@@ -36,4 +40,31 @@ let vuePanel = new Vue({
             immediate: true
         }
     },
+    computed: {},
+    methods: {
+        openFullscreen: function() {
+            var elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        },
+
+        closeFullscreen: function() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+        },
+
+        isFullScreen: function() {
+            return document.fullscreenElement != null;
+        }
+    }
 });
