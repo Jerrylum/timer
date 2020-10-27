@@ -12,6 +12,8 @@ i18n.use({
   get_help: 'Get help',
   get_help_link: './intro/en',
   hide_ui: 'Hide buttons',
+  enter_fullscreen: 'Full screen',
+  exit_fullscreen: 'Exit full screen',
   theme: {
     dark: 'Dark',
     light: 'Light'
