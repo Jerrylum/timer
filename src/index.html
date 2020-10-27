@@ -12,7 +12,7 @@
     <link href="./css/style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" sizes="32x32" href="./favicon.ico" />
     <title>Jerry Timer</title>
-    <script src="./script/polyfill.min.js"></script>
+    <script src="./static/polyfill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
     <script src="./script/preload.js"></script>
     <script src="./script/language.js"></script>
@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div id="thebody" @keydown="BodyKeyDownEvent" @mousemove="BodyMouseMoveEvent" :class="{'hide-optional': isHideOptional}">
+    <div id="thebody" @keydown="BodyKeyDownEvent" @mousemove="BodyMouseMoveEvent" :class="{'hide-optional': vuePanel.isHideOptional}">
         <div class="CENTER" id="timer">
             <div id="timer-content">
                 <div id="timer-body">
@@ -45,7 +45,9 @@
                 </div>
             </div>
         </div>
-        <div id="setting-area" class="optional">
+    </div>
+    <div id="setting-panel" :class="{'hide-optional': isHideOptional}">
+        <div class="optional">
             <div class="normal-icon dropdown">
                 <img src="./img/language.svg" :title="lang.change_language">
                 <div id="change-language" class="dropdown-content">
@@ -68,7 +70,8 @@
             </div>
         </div>
     </div>
-    <script src="./script/app.js"></script>
+    <script src="./script/vue-panel.js"></script>
+    <script src="./script/vue-timer.js"></script>
 
 </body>
 

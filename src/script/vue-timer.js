@@ -1,11 +1,9 @@
 'use strict';
 
-let vi = new Vue({
+let vueTimer = new Vue({
     el: '#thebody',
     mounted() {
         let cookie = getCookie();
-
-        this.theme = cookie.theme || this.theme;
 
         if (cookie.timer_mode) {
             if (cookie.timer_mode == 'countdown') {
@@ -20,9 +18,9 @@ let vi = new Vue({
             this.t._previousTicks = Math.trunc(cookie.timer_previous_ticks) || 0;
         }
 
-        setInterval(function() {
+        setInterval(() => {
             // HACK, manually update
-            if (vi.t) vi.t.__ob__.dep.notify();
+            if (this.t) this.t.__ob__.dep.notify();
         }, 1);
 
         getAllEditableTimeValueField().forEach((x) => {
@@ -34,12 +32,6 @@ let vi = new Vue({
 
     },
     data: {
-        theme: 'dark',
-        themesList: [
-            'dark',
-            'light'
-        ],
-        isHideOptional: false,
         t: new CountdownTimer(),
         timerEditingFlag: {
             hour: false,
@@ -51,18 +43,8 @@ let vi = new Vue({
     watch: {
         't._previousTicks': function() { this.updateTimerCookie() },
         't._startTick': function() { this.updateTimerCookie() },
-        theme: {
-            handler: function() {
-                document.body.className = this.theme;
-                setCookie({ theme: this.theme });
-            },
-            immediate: true
-        },
-        isHideOptional: function() {
-            document.body.style.cursor = this.isHideOptional ? 'none' : '';
-        },
         timeS: function() {
-            document.title = `${vi.timeH}:${vi.timeM}:${vi.timeS}`
+            document.title = `${this.timeH}:${this.timeM}:${this.timeS}`
         }
 
     },
@@ -84,9 +66,9 @@ let vi = new Vue({
         },
 
         BodyMouseMoveEvent: function(e) {
-            if (!this.isHideOptional) return;
+            if (!vuePanel.isHideOptional) return;
 
-            if (e.movementX > 1 || e.movementY > 1) this.isHideOptional = false;
+            if (e.movementX > 1 || e.movementY > 1) vuePanel.isHideOptional = false;
         },
 
         clickBtn1Event: function() {

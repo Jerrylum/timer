@@ -14,7 +14,7 @@ body {
     cursor: none;
 }
 
-.hide-optional .optional{
+.hide-optional .optional {
     display: none !important;
 }
 
@@ -74,7 +74,7 @@ body {
     border-color: transparent transparent #333 transparent;
 }
 
-#setting-area {
+#setting-panel {
     position: fixed;
     top: 10px;
     right: 10px;
@@ -125,7 +125,7 @@ body {
     width: 38px;
 }
 
-.normal-icon img{
+.normal-icon img {
     cursor: pointer;
     max-height: 38px;
     max-width: 38px;
@@ -175,6 +175,7 @@ body {
     width: 180px;
     text-align: right;
 }
+
 
 /* #btn0 {
     background-color: #00C;
