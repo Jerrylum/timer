@@ -12,6 +12,8 @@ i18n.use({
   get_help: '取得幫助',
   get_help_link: './intro/',
   hide_ui: '隱藏介面按鈕',
+  enter_fullscreen: '全螢幕',
+  exit_fullscreen: '退出全螢幕',
   theme: {
     dark: '暗黑',
     light: '光亮'

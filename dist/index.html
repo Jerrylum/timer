@@ -64,6 +64,10 @@
                 <img src="./img/hide.svg" :title="lang.hide_ui" @click="isHideOptional = true;">
             </div>
             <div class="normal-icon">
+                <img src="./img/expand.svg" :title="lang.enter_fullscreen" @click="openFullscreen()" v-show="!isFullScreen()">
+                <img src="./img/compress.svg" :title="lang.exit_fullscreen" @click="closeFullscreen()" v-show="isFullScreen()">
+            </div>
+            <div class="normal-icon">
                 <a :href="lang.get_help_link" target="_blank">
                     <img src="./img/question.svg" :title="lang.get_help">
                 </a>

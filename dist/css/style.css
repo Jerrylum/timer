@@ -10,6 +10,9 @@ body {
     margin: 0;
 }
 
+
+/* Trigger */
+
 .hide-optional {
     cursor: none;
 }
@@ -17,6 +20,9 @@ body {
 .hide-optional .optional {
     display: none !important;
 }
+
+
+/* Start Theme */
 
 .dark {
     background-color: black;
@@ -123,6 +129,7 @@ body {
 .normal-icon a {
     height: 38px;
     width: 38px;
+    text-align: center;
 }
 
 .normal-icon img {
