@@ -12,6 +12,7 @@ i18n.use({
     hide_ui: 'Hide buttons',
     enter_fullscreen: 'Full screen',
     exit_fullscreen: 'Exit full screen',
+    change_zoom: 'Zoom',
     theme: {
         dark: 'Dark',
         light: 'Light'

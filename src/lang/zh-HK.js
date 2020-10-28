@@ -12,6 +12,7 @@ i18n.use({
     hide_ui: '隱藏介面按鈕',
     enter_fullscreen: '全螢幕',
     exit_fullscreen: '退出全螢幕',
+    change_zoom: '放大',
     theme: {
         dark: '暗黑',
         light: '光亮'

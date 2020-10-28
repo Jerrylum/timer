@@ -67,6 +67,12 @@
                 <img src="./img/expand.svg" :title="lang.enter_fullscreen" @click="openFullscreen()" v-show="!isFullScreen()">
                 <img src="./img/compress.svg" :title="lang.exit_fullscreen" @click="closeFullscreen()" v-show="isFullScreen()">
             </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/search-plus.svg" :title="lang.change_zoom">
+                <div id="change-zoom" class="dropdown-content">
+                    <span v-for="size in [1,1.25,1.5,2,2.5,3]" @click="zoomScale = size">×{{ size }}</span>
+                </div>
+            </div>
             <div class="normal-icon">
                 <a :href="lang.get_help_link" target="_blank">
                     <img src="./img/question.svg" :title="lang.get_help">
