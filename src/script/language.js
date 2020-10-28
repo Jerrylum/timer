@@ -39,7 +39,6 @@ const i18n = {
     },
 
     load: async function(code) {
-        console.log(2);
         let fileref = document.createElement('script');
         fileref.setAttribute('src', './lang/' + code + '.js');
 

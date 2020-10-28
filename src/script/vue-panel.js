@@ -18,6 +18,11 @@ let vuePanel = new Vue({
         document.addEventListener("fullscreenchange", () => {
             this.$forceUpdate();
         });
+
+        window.addEventListener('resize', () => {
+            this.$forceUpdate();
+        });
+
     },
     data: {
         isHideOptional: false,
@@ -25,7 +30,8 @@ let vuePanel = new Vue({
         themesList: [
             'dark',
             'light'
-        ]
+        ],
+        zoomScale: 1
     },
     watch: {
         isHideOptional: function() {
@@ -65,6 +71,14 @@ let vuePanel = new Vue({
 
         isFullScreen: function() {
             return document.fullscreenElement != null;
+        },
+
+        getTimerScale: function() {
+            var clientWidth = document.body.offsetWidth;
+
+            var i = Math.min(1, clientWidth / 900) * this.zoomScale;
+
+            return "scale(" + i + ")";
         }
     }
 });
