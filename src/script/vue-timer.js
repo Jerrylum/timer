@@ -25,7 +25,7 @@ let vueTimer = new Vue({
             if (this.t) this.t.__ob__.dep.notify();
         }, 1);
 
-        this.getAllEditableTimeValueField().forEach((x) => {
+        this.getAllEditableTimeValueFieldElm().forEach((x) => {
             x.addEventListener('focus', this.focusTimeValueFieldEvent, false);
             x.addEventListener('blur', this.blurTimeValueFieldEvent, false);
             x.addEventListener('beforeinput', this.b4changedTimeValueFieldEvent, false);
@@ -52,15 +52,16 @@ let vueTimer = new Vue({
     },
     methods: {
         BodyKeyDownEvent: function(e) {
+            let allFieldId = this.getAllEditableTimeValueFieldId();
+            let allFieldElm = this.getAllEditableTimeValueFieldElm();
+
             if (e.key === 'Tab' || e.key === 'Enter') {
                 let target_id = e.target.id;
-                if (target_id in this.getTimerData()) {
+                if (allFieldId.includes(target_id)) {
                     e.preventDefault();
 
                     let now = e.target;
-                    let allFields = this.getAllEditableTimeValueField();
-
-                    let next = allFields[(allFields.indexOf(now) + 1) % allFields.length];
+                    let next = allFieldElm[(allFieldId.indexOf(target_id) + 1) % allFieldElm.length];
                     now.blur();
                     next.focus();
                 }
@@ -95,16 +96,9 @@ let vueTimer = new Vue({
 
 
         updateEditableDataAndHtml: function(target, value) {
-            if (target.id === 'hour') {
-                value = Math.max(0, Math.min(value, 99));
-            } else if (target.id === 'minute') {
-                value = Math.max(0, Math.min(value, 59));
-            } else if (target.id === 'second') {
-                value = Math.max(0, Math.min(value, 59));
-            } else if (target.id === 'msec') {
-                value = Math.max(0, Math.min(value, 999));
-            }
-            //this.timerEditableData[target.id] = value;
+            let max = { hour: 99, minute: 59, second: 59, msec: 999 };
+            value = Math.max(0, Math.min(value, max[target.id]));
+
             target.innerText = value;
 
             let { hour, minute, second, msec } = this.getTimerData();
@@ -116,7 +110,7 @@ let vueTimer = new Vue({
 
             this.timerEditingFlag[target.id] = true;
 
-            target.beforeFocus = target.innerText;
+            target.beforeFocus = target.innerText; // important
         },
 
         blurTimeValueFieldEvent: function(e) {
@@ -144,15 +138,10 @@ let vueTimer = new Vue({
             let target = e.target;
             let value_str = target.innerText;
 
-            if (value_str.length == 0) {
+            if (value_str.length == 0)
                 value_str = target.innerText = '0';
-            }
 
-            if (target.id == "msec") {
-                value_str = value_str.slice(0, 3);
-            } else {
-                value_str = value_str.slice(0, 2);
-            }
+            value_str = value_str.slice(0, target.id == "msec" ? 3 : 2);
 
             let value = Math.trunc(value_str);
             if (isNaN(value) || value_str.indexOf('.') !== -1) {
@@ -185,17 +174,21 @@ let vueTimer = new Vue({
         },
 
         getTimerData: function() {
-            let fields = this.getAllEditableTimeValueField();
-            return {
-                hour: fields[0].innerText - 0,
-                minute: fields[1].innerText - 0,
-                second: fields[2].innerText - 0,
-                msec: fields[3].innerText - 0
-            };
+            let rtn = {};
+            this.getAllEditableTimeValueFieldId()
+                .forEach(id => rtn[id] = document.getElementById(id).innerText - 0);
+            return rtn;
         },
 
-        getAllEditableTimeValueField: function() {
-            return [...document.querySelectorAll('#timer-value > *[contenteditable]'), document.querySelector('#msec')];
+        getAllEditableTimeValueFieldId: function() {
+            return ['hour', 'minute', 'second', 'msec'];
+        },
+
+        getAllEditableTimeValueFieldElm: function() {
+            let rtn = [];
+            this.getAllEditableTimeValueFieldId()
+                .forEach(id => rtn.push(document.getElementById(id)));
+            return rtn;
         }
 
     },
