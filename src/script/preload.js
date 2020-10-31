@@ -186,17 +186,3 @@ function getCookie() {
             return acc;
         }, {});
 }
-
-function getAllEditableTimeValueField() {
-    return [...document.querySelectorAll('#timer-value > *[contenteditable]'), document.querySelector('#msec')];
-}
-
-function getTimerData() {
-    let fields = getAllEditableTimeValueField();
-    return {
-        hour: fields[0].innerText - 0,
-        minute: fields[1].innerText - 0,
-        second: fields[2].innerText - 0,
-        msec: fields[3].innerText - 0
-    };
-}

@@ -25,7 +25,7 @@ let vueTimer = new Vue({
             if (this.t) this.t.__ob__.dep.notify();
         }, 1);
 
-        getAllEditableTimeValueField().forEach((x) => {
+        this.getAllEditableTimeValueField().forEach((x) => {
             x.addEventListener('focus', this.focusTimeValueFieldEvent, false);
             x.addEventListener('blur', this.blurTimeValueFieldEvent, false);
             x.addEventListener('beforeinput', this.b4changedTimeValueFieldEvent, false);
@@ -54,11 +54,11 @@ let vueTimer = new Vue({
         BodyKeyDownEvent: function(e) {
             if (e.key === 'Tab' || e.key === 'Enter') {
                 let target_id = e.target.id;
-                if (target_id in getTimerData()) {
+                if (target_id in this.getTimerData()) {
                     e.preventDefault();
 
                     let now = e.target;
-                    let allFields = getAllEditableTimeValueField();
+                    let allFields = this.getAllEditableTimeValueField();
 
                     let next = allFields[(allFields.indexOf(now) + 1) % allFields.length];
                     now.blur();
@@ -107,7 +107,7 @@ let vueTimer = new Vue({
             //this.timerEditableData[target.id] = value;
             target.innerText = value;
 
-            let { hour, minute, second, msec } = getTimerData();
+            let { hour, minute, second, msec } = this.getTimerData();
             this.t.set(hour, minute, second, msec);
         },
 
@@ -182,6 +182,20 @@ let vueTimer = new Vue({
                 timer_init_ticks: this.t._initTicks, // for stopwatch
                 timer_total_ticks: this.t._totalTicks // for countdown timer
             });
+        },
+
+        getTimerData: function() {
+            let fields = this.getAllEditableTimeValueField();
+            return {
+                hour: fields[0].innerText - 0,
+                minute: fields[1].innerText - 0,
+                second: fields[2].innerText - 0,
+                msec: fields[3].innerText - 0
+            };
+        },
+
+        getAllEditableTimeValueField: function() {
+            return [...document.querySelectorAll('#timer-value > *[contenteditable]'), document.querySelector('#msec')];
         }
 
     },
@@ -234,15 +248,15 @@ let vueTimer = new Vue({
                 false;
         },
 
-        getBtn1Warning: function() {
+        btn1Warning: function() {
             return this.t.status == TimerStatus.TIMESUP ? lang.times_up_blocked_warning : '';
         },
 
-        getBtn1Message: function() {
+        btn1Message: function() {
             return this.t.status == TimerStatus.RUNNING ? lang.pause : lang.start;
         },
 
-        getBtn2Message: function() {
+        btn2Message: function() {
             return this.t.status == TimerStatus.INIT ? lang.clear : lang.reset;
         },
 
