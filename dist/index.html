@@ -21,28 +21,26 @@
 
 <body>
     <div id="thebody" @keydown="BodyKeyDownEvent" :class="{'hide-optional': vuePanel.isHideOptional}" class="center">
-        <div class="middle">
-            <div class="inner" id="timer">
-                <div id="timer-content">
-                    <div id="timer-body">
-                        <span id="timer-value">
-                        <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
-                        <span>:</span>
-                        <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
-                        <span>:</span>
-                        <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
-                        </span>
-                        <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
+        <div id="timer" :style="{'transform': vuePanel.getTimerScale()}">
+            <div id="timer-content">
+                <div id="timer-body">
+                    <span id="timer-value">
+                    <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
+                    <span>:</span>
+                    <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
+                    <span>:</span>
+                    <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
+                    </span>
+                    <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
+                </div>
+                <div id="timer-btns" class="optional">
+                    <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
+                        <span class="content">{{ btn1Message }}</span>
+                        <span class="tooltiptext">{{ btn1Warning }}</span>
                     </div>
-                    <div id="timer-btns" class="optional">
-                        <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
-                            <span class="content">{{ getBtn1Message }}</span>
-                            <span class="tooltiptext">{{ getBtn1Warning }}</span>
-                        </div>
-                        <div id="btn2" @click="clickBtn2Event">
-                            <span class="content">{{ getBtn2Message }}</span>
-                            <span class="tooltiptext"></span>
-                        </div>
+                    <div id="btn2" @click="clickBtn2Event">
+                        <span class="content">{{ btn2Message }}</span>
+                        <span class="tooltiptext"></span>
                     </div>
                 </div>
             </div>
@@ -68,6 +66,12 @@
             <div class="normal-icon">
                 <img src="./img/expand.svg" :title="lang.enter_fullscreen" @click="openFullscreen()" v-show="!isFullScreen()">
                 <img src="./img/compress.svg" :title="lang.exit_fullscreen" @click="closeFullscreen()" v-show="isFullScreen()">
+            </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/search-plus.svg" :title="lang.change_zoom">
+                <div id="change-zoom" class="dropdown-content">
+                    <span v-for="size in [1,1.25,1.5,2,2.5,3]" @click="zoomScale = size">×{{ size }}</span>
+                </div>
             </div>
             <div class="normal-icon">
                 <a :href="lang.get_help_link" target="_blank">
