@@ -71,7 +71,7 @@ let vuePanel = new Vue({
         },
 
         isFullScreen: function() {
-            return document.fullscreenElement != null;
+            return document.fullscreenElement != null || document.msFullscreenElement != null;
         },
 
         getTimerScale: function() {
