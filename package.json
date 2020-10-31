@@ -2,9 +2,9 @@
   "name": "jerrytimer",
   "version": "1.0.0",
   "description": "No ads, an online timer created by Jerrylum, better than online-stopwatch.com",
-  "main": "deploy.js",
+  "main": "compile.js",
   "scripts": {
-    "compile": "node deploy.js && babel src --out-dir dist && terser-folder dist/script -o dist/script -e -x .js && terser-folder dist/lang -o dist/lang -e -x .js",
+    "compile": "node compile.js",
     "upload": "git checkout master && git subtree split --prefix dist -b gh-pages && git push -f origin gh-pages:gh-pages && git branch -D gh-pages"
   },
   "keywords": [
