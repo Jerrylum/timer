@@ -12,6 +12,10 @@ i18n.use({
     hide_ui: 'Hide buttons',
     enter_fullscreen: 'Full screen',
     exit_fullscreen: 'Exit full screen',
+    sound_openned: 'Sound on',
+    sound_closed: 'Sound off',
+    sound_do_open: 'Turn on',
+    sound_do_close: 'Turn off',
     change_zoom: 'Zoom',
     theme: {
         dark: 'Dark',

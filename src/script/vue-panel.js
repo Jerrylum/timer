@@ -31,7 +31,8 @@ let vuePanel = new Vue({
             'dark',
             'light'
         ],
-        zoomScale: 1
+        zoomScale: 1,
+        sound: new SoundManager()
     },
     watch: {
         isHideOptional: function() {

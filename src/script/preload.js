@@ -167,6 +167,42 @@ class CountdownTimer extends Timer {
 
 }
 
+class SoundManager {
+    constructor() {
+        this._on = true;
+        this._playing = false; // for IE
+    }
+
+    updateStatus(status) {
+        if (status == TimerStatus.TIMESUP) {
+            if (this._playing == false) {
+                this.audioElem.currentTime = 0;
+                this.audioElem.play();
+                this._playing = true;
+            }
+        } else {
+            this.audioElem.pause();
+            this._playing = false;
+        }
+    }
+
+    set isSoundOn(v) {
+        this._on = v;
+
+        this.audioElem.volume = this._on ? 1 : 0;
+    }
+
+    get isSoundOn() {
+        return this._on;
+    }
+
+    get audioElem() {
+        return document.getElementById("sound");
+    }
+
+
+}
+
 function setCookie(input) {
     var expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);

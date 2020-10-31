@@ -73,12 +73,24 @@
                     <span v-for="size in [1,1.25,1.5,2,2.5,3]" @click="zoomScale = size">×{{ size }}</span>
                 </div>
             </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/sound.svg" :title="lang.sound_openned" v-show="sound.isSoundOn" width="38px">
+                <img src="./img/mute.svg" :title="lang.sound_closed" v-show="!sound.isSoundOn">
+                <div id="change-sound" class="dropdown-content">
+                    <span @click="sound.isSoundOn = true">{{ lang.sound_do_open }}</span>
+                    <span @click="sound.isSoundOn = false">{{ lang.sound_do_close }}</span>
+                </div>
+            </div>
             <div class="normal-icon">
                 <a :href="lang.get_help_link" target="_blank">
                     <img src="./img/question.svg" :title="lang.get_help">
                 </a>
             </div>
         </div>
+        <audio id="sound">
+            <source src="./sound/classic.ogg" />
+            <source src="./sound/classic.mp3" />
+        </audio>
     </div>
     <script src="./script/vue-panel.js"></script>
     <script src="./script/vue-timer.js"></script>

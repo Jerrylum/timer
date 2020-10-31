@@ -45,6 +45,7 @@ let vueTimer = new Vue({
     watch: {
         't._previousTicks': function() { this.updateTimerCookie() },
         't._startTick': function() { this.updateTimerCookie() },
+        't.status': function(value) { vuePanel.sound.updateStatus(value) },
         timeS: function() {
             document.title = `${this.timeH}:${this.timeM}:${this.timeS}`
         }
