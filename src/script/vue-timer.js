@@ -32,6 +32,8 @@ let vueTimer = new Vue({
             x.addEventListener('input', this.changedTimeValueFieldEvent, false);
         });
 
+        this.isEditable
+
     },
     data: {
         t: new CountdownTimer(),
@@ -48,21 +50,30 @@ let vueTimer = new Vue({
         't.status': function(value) { vuePanel.sound.updateStatus(value) },
         timeS: function() {
             document.title = `${this.timeH}:${this.timeM}:${this.timeS}`
+        },
+        isEditable: {
+            handler: function(v) {
+                this.getAllEditableTimeValueFieldElm().forEach(x => {
+                    if (v)
+                        x.setAttribute('contenteditable', 'true');
+                    else
+                        x.removeAttribute('contenteditable');
+                });
+            },
+            immediate: true
         }
 
     },
     methods: {
         BodyKeyDownEvent: function(e) {
-            let allFieldId = this.getAllEditableTimeValueFieldId();
-            let allFieldElm = this.getAllEditableTimeValueFieldElm();
+            let allFieldElm = [...this.getAllEditableTimeValueFieldElm()];
 
             if (e.key === 'Tab' || e.key === 'Enter') {
-                let target_id = e.target.id;
-                if (allFieldId.includes(target_id)) {
+                if (allFieldElm.includes(e.target)) {
                     e.preventDefault();
 
                     let now = e.target;
-                    let next = allFieldElm[(allFieldId.indexOf(target_id) + 1) % allFieldElm.length];
+                    let next = allFieldElm[(allFieldElm.indexOf(e.target) + 1) % allFieldElm.length];
                     now.blur();
                     next.focus();
                 }
@@ -176,20 +187,12 @@ let vueTimer = new Vue({
 
         getTimerData: function() {
             let rtn = {};
-            this.getAllEditableTimeValueFieldId()
-                .forEach(id => rtn[id] = document.getElementById(id).innerText - 0);
+            this.getAllEditableTimeValueFieldElm().forEach(e => rtn[e.id] = e.innerText - 0);
             return rtn;
-        },
-
-        getAllEditableTimeValueFieldId: function() {
-            return ['hour', 'minute', 'second', 'msec'];
         },
 
         getAllEditableTimeValueFieldElm: function() {
-            let rtn = [];
-            this.getAllEditableTimeValueFieldId()
-                .forEach(id => rtn.push(document.getElementById(id)));
-            return rtn;
+            return [...document.querySelectorAll('#timer-body span.editable-field')];
         }
 
     },
