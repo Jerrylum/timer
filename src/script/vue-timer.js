@@ -32,8 +32,6 @@ let vueTimer = new Vue({
             x.addEventListener('input', this.changedTimeValueFieldEvent, false);
         });
 
-        this.isEditable
-
     },
     data: {
         t: new CountdownTimer(),

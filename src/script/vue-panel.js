@@ -8,6 +8,7 @@ let vuePanel = new Vue({
         let cookie = getCookie();
 
         this.theme = cookie.theme || this.theme;
+        this.sound.isSoundOn = cookie.sound ? cookie.sound == 'true' : this.sound.isSoundOn;
 
         let cancelHideOptional = () => {
             if (!this.isHideOptional) return;
@@ -55,10 +56,19 @@ let vuePanel = new Vue({
             document.body.style.cursor = this.isHideOptional ? 'none' : '';
         },
         theme: {
-            handler: function() {
+            handler: function(newVal, oldVal) {
                 this.themesList.forEach(x => document.body.classList.remove(x));
-                document.body.classList.add(this.theme);
-                setCookie({ theme: this.theme });
+                document.body.classList.add(newVal);
+
+                if (oldVal != undefined) // important, check is not immediate update
+                    setCookie({ theme: newVal });
+            },
+            immediate: true
+        },
+        'sound.isSoundOn': {
+            handler: function(newVal, oldVal) {
+                if (oldVal != undefined) // important, check is not immediate update
+                    setCookie({ sound: newVal });
             },
             immediate: true
         }
