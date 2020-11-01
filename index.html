@@ -25,13 +25,13 @@
             <div id="timer-content">
                 <div id="timer-body">
                     <span id="timer-value">
-                    <span id="hour" :contenteditable="isEditable" v-text="timeH"></span>
+                    <span id="hour" class="editable-field" v-text="timeH"></span>
                     <span>:</span>
-                    <span id="minute" :contenteditable="isEditable" v-text="timeM"></span>
+                    <span id="minute" class="editable-field" v-text="timeM"></span>
                     <span>:</span>
-                    <span id="second" :contenteditable="isEditable" v-text="timeS"></span>
+                    <span id="second" class="editable-field" v-text="timeS"></span>
                     </span>
-                    <span id="msec" :contenteditable="isEditable" v-text="timeMS"></span>
+                    <span id="msec" class="editable-field" v-text="timeMS"></span>
                 </div>
                 <div id="timer-btns" class="optional">
                     <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">

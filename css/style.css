@@ -194,7 +194,7 @@ body {
     float: left;
 }
 
-#timer-value span[contenteditable] {
+#timer-value span.editable-field {
     width: 230px;
     text-align: center;
     outline: none;
