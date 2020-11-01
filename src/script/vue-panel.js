@@ -9,10 +9,26 @@ let vuePanel = new Vue({
 
         this.theme = cookie.theme || this.theme;
 
-        document.body.addEventListener("mousemove", (e) => {
+        let cancelHideOptional = () => {
             if (!this.isHideOptional) return;
 
-            if (e.movementX > 2 || e.movementY > 2) this.isHideOptional = false;
+            this.isHideOptional = false;
+        };
+
+        document.body.addEventListener("touchstart", cancelHideOptional, false);
+        document.body.addEventListener("touchmove", cancelHideOptional, false);
+
+        // IE does not support movementX
+        let prevX = 0;
+        let prevY = 0;
+        document.body.addEventListener("mousemove", (e) => {
+            let movementX = (prevX ? e.screenX - prevX : 0)
+            let movementY = (prevY ? e.screenY - prevY : 0)
+
+            prevX = e.screenX;
+            prevY = e.screenY;
+
+            if (movementX > 2 || movementY > 2) cancelHideOptional();
         });
 
         document.addEventListener("fullscreenchange", () => {
