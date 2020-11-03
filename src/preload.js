@@ -222,3 +222,13 @@ function getCookie() {
             return acc;
         }, {});
 }
+
+module.exports = {
+    TimerStatus,
+    Timer,
+    StopwatchTimer,
+    CountdownTimer,
+    SoundManager,
+    setCookie,
+    getCookie
+};

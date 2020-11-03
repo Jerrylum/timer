@@ -1,6 +1,9 @@
 'use strict';
 
-let vuePanel = new Vue({
+const { getCookie, setCookie, SoundManager } = require('./preload');
+const { i18n } = require('./language');
+
+window.vuePanel = new Vue({
     el: '#setting-panel',
     mounted() {
         i18n.addComponent(this);
@@ -109,3 +112,6 @@ let vuePanel = new Vue({
         }
     }
 });
+
+
+module.exports = { vuePanel };

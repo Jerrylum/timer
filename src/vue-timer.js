@@ -1,6 +1,9 @@
 'use strict';
 
-let vueTimer = new Vue({
+const { TimerStatus, StopwatchTimer, CountdownTimer, getCookie, setCookie } = require('./preload');
+const { i18n } = require('./language');
+
+window.vueTimer = new Vue({
     el: '#thebody',
     mounted() {
         i18n.addComponent(this);
@@ -262,3 +265,6 @@ let vueTimer = new Vue({
 
     }
 });
+
+
+module.exports = { vueTimer };

@@ -1,6 +1,8 @@
-let lang;
+const { TimerStatus, Timer, StopwatchTimer, CountdownTimer, getCookie, setCookie } = require('./preload');
 
-const i18n = {
+window.lang = undefined;
+
+window.i18n = {
     languages: {
         "en-US": "English",
         "zh-HK": "繁體中文"
@@ -46,7 +48,7 @@ const i18n = {
     },
 
     use: async function(newLang) {
-        lang = lang == undefined ? newLang : Object.assign(lang, newLang);
+        window.lang = window.lang == undefined ? newLang : Object.assign(lang, newLang);
         setCookie({ lang: lang.name });
 
         this.components.forEach(c => {
@@ -55,4 +57,5 @@ const i18n = {
     }
 };
 
-i18n.init();
+
+module.exports = { i18n };
