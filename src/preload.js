@@ -177,7 +177,11 @@ class SoundManager {
         if (status == TimerStatus.TIMESUP) {
             if (this._playing == false) {
                 this.audioElem.currentTime = 0;
-                this.audioElem.play();
+
+                let playPromise = this.audioElem.play();
+                if (playPromise !== undefined)
+                    playPromise.catch(() => undefined);
+
                 this._playing = true;
             }
         } else {
