@@ -29,7 +29,7 @@ So, I decided to make a timer myself, a simple and stable timer.
 
 ## How do I use it?
 
-I hosted the latest version of Jerry Timer on Github Page. Pay a visit to our page, <a href="https://jerrylum.github.io/timer/">jerrylum.github.io/timer/</a>, or via short url <a href="https://git.io/JfW1J">git.io/JfW1J</a>, to try something new and give online-stopwatch.com up.
+I hosted the latest version of Jerry Timer on Github Page. Pay a visit to our page, <a href="https://timer.jerryio.com">timer.jerryio.com</a>, or via short url <a href="https://git.io/JfW1J">git.io/JfW1J</a>, to try something new and give online-stopwatch.com up.
 
 You can go to [the intro page](https://jerrylum.github.io/timer/intro/en) to find more information. If you have further questions, please feel free to create a new issue.
 
