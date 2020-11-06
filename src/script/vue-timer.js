@@ -121,6 +121,16 @@ window.vueTimer = new Vue({
         focusTimeValueFieldEvent: function(e) {
             let target = e.target;
 
+            if (target.contentEditable == 'inherit') return;
+
+            var p = target,
+                s = window.getSelection(),
+                r = document.createRange();
+            r.setStart(p, 0);
+            r.setEnd(p, 0);
+            s.removeAllRanges();
+            s.addRange(r);
+
             this.timerEditingFlag[target.id] = true;
 
             target.beforeFocus = target.innerText; // important
@@ -128,6 +138,9 @@ window.vueTimer = new Vue({
 
         blurTimeValueFieldEvent: function(e) {
             let target = e.target;
+
+            if (this.timerEditingFlag[target.id] == false) return;
+
             let value_str = target.innerText;
             let value = Math.trunc(value_str);
 

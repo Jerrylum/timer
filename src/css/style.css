@@ -254,6 +254,7 @@ body {
     line-height: 70px;
     text-align: center;
     user-select: none;
+    -ms-user-select: none;
     -webkit-flex: 0 1 auto;
     -ms-flex: 0 1 auto;
     flex: 0 1 auto;
