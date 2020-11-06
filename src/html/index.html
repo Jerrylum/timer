@@ -16,7 +16,6 @@
     <script src="./static/polyfill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
     <script src="./static/bundle.js"></script>
-    <script src="./lang/en-US.js"></script>
 </head>
 
 <body>
@@ -57,7 +56,7 @@
             <div class="normal-icon dropdown">
                 <img src="./img/theme.svg" :title="lang.change_theme">
                 <div id="change-theme" class="dropdown-content">
-                    <span v-for="code in themesList" @click="theme=code">{{ lang.theme[code] }}</span>
+                    <span v-for="code in themesList" @click="theme=code">{{ lang.theme && lang.theme[code] }}</span>
                 </div>
             </div>
             <div class="normal-icon">

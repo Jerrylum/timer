@@ -1,6 +1,6 @@
 const { TimerStatus, Timer, StopwatchTimer, CountdownTimer, getCookie, setCookie } = require('./preload');
 
-window.lang = undefined;
+window.lang = {};
 
 window.i18n = {
     languages: {
@@ -36,8 +36,9 @@ window.i18n = {
         }
 
         // english by default
-        if (code != undefined)
-            this.load(code); // load new language file if other one is better
+        if (code == undefined) code = 'en-US';
+
+        this.load(code); // load new language file if other one is better
     },
 
     load: async function(code) {
