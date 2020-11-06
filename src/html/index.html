@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="LwuwO4PWouh6opvAm4lmFUnRt4I9nOFH7NJP8Dam7TQ" />
+    <meta name="theme-color" content="black">
+    <meta name="keywords" content="stopwatch, countdown, timer, free, no ads">
+    <meta name="subject" content="timer, tool">
+    <meta name="description" content="No ads, an online timer created by Jerrylum, better than online-stopwatch.com">
+    <meta name="author" content="Jerrylum">
+    <link href="./static/bundle.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" sizes="32x32" href="./favicon.png" />
+    <title>Jerry Timer</title>
+    <script src="./static/polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+    <script src="./static/bundle.js"></script>
+    <script src="./lang/en-US.js"></script>
+</head>
+
+<body>
+    <div id="thebody" @keydown="BodyKeyDownEvent" :class="{'hide-optional': vuePanel.isHideOptional}" class="center">
+        <div id="timer" :style="{'transform': vuePanel.getTimerScale()}">
+            <div id="timer-content">
+                <div id="timer-body">
+                    <span id="timer-value">
+                    <span id="hour" class="editable-field" v-text="timeH"></span>
+                    <span>:</span>
+                    <span id="minute" class="editable-field" v-text="timeM"></span>
+                    <span>:</span>
+                    <span id="second" class="editable-field" v-text="timeS"></span>
+                    </span>
+                    <span id="msec" class="editable-field" v-text="timeMS"></span>
+                </div>
+                <div id="timer-btns" class="optional">
+                    <div id="btn1" @click="clickBtn1Event" :class="{disabled: isBtn1Disabled}">
+                        <span class="content">{{ btn1Message }}</span>
+                        <span class="tooltiptext">{{ btn1Warning }}</span>
+                    </div>
+                    <div id="btn2" @click="clickBtn2Event">
+                        <span class="content">{{ btn2Message }}</span>
+                        <span class="tooltiptext"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="setting-panel" :class="{'hide-optional': isHideOptional}">
+        <div class="optional">
+            <div class="normal-icon dropdown">
+                <img src="./img/language.svg" :title="lang.change_language">
+                <div id="change-language" class="dropdown-content">
+                    <span v-for="(name, code, index) in i18n.languages" @click="i18n.load(code)">{{ name }}</span>
+                </div>
+            </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/theme.svg" :title="lang.change_theme">
+                <div id="change-theme" class="dropdown-content">
+                    <span v-for="code in themesList" @click="theme=code">{{ lang.theme[code] }}</span>
+                </div>
+            </div>
+            <div class="normal-icon">
+                <img src="./img/hide.svg" :title="lang.hide_ui" @click="isHideOptional = true;">
+            </div>
+            <div class="normal-icon">
+                <img src="./img/expand.svg" :title="lang.enter_fullscreen" @click="openFullscreen()" v-show="!isFullScreen()">
+                <img src="./img/compress.svg" :title="lang.exit_fullscreen" @click="closeFullscreen()" v-show="isFullScreen()">
+            </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/search-plus.svg" :title="lang.change_zoom">
+                <div id="change-zoom" class="dropdown-content">
+                    <span v-for="size in [1,1.25,1.5,2,2.5,3]" @click="zoomScale = size">×{{ size }}</span>
+                </div>
+            </div>
+            <div class="normal-icon dropdown">
+                <img src="./img/sound.svg" :title="lang.sound_openned" v-show="sound.isSoundOn" width="38px">
+                <img src="./img/mute.svg" :title="lang.sound_closed" v-show="!sound.isSoundOn">
+                <div id="change-sound" class="dropdown-content">
+                    <span @click="sound.isSoundOn = true">{{ lang.sound_do_open }}</span>
+                    <span @click="sound.isSoundOn = false">{{ lang.sound_do_close }}</span>
+                </div>
+            </div>
+            <div class="normal-icon">
+                <a :href="lang.get_help_link" target="_blank">
+                    <img src="./img/question.svg" :title="lang.get_help">
+                </a>
+            </div>
+        </div>
+        <audio id="sound" preload>
+            <source src="./sound/classic.ogg" />
+            <source src="./sound/classic.mp3" />
+        </audio>
+    </div>
+
+</body>
+
+</html>

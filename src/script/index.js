@@ -1,5 +1,6 @@
 'use strict';
 
+require('../css/style.css');
 require('./language');
 
 window.addEventListener('DOMContentLoaded', () => {
