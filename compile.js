@@ -23,8 +23,14 @@ function command(cmd) {
 (async() => {
     try {
         await command("npx webpack");
-        await command("npx babel dist/script --out-dir dist/script");
-        await command("npx terser-folder dist/script -o dist/script -e -x .js");
+        (async() => {
+            await command("npx babel src/lang --out-dir dist/lang");
+            await command("npx terser-folder dist/lang -o dist/lang -e -x .js");
+        })();
+        (async() => {
+            await command("npx babel dist/script --out-dir dist/script");
+            await command("npx terser-folder dist/script -o dist/script -e -x .js");
+        })();
     } catch (error) {
         console.log("Compilation failed");
     }
