@@ -9,3 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
     require('./vue-panel');
     require('./vue-timer');
 });
+
+window.addEventListener('load', () => {
+    document.getElementById('sound').load();
+});
