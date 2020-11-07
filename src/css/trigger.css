@@ -1,0 +1,32 @@
+.hide-optional {
+    cursor: none;
+}
+
+.hide-optional .optional {
+    display: none !important;
+}
+
+.disabled {
+    cursor: not-allowed !important;
+}
+
+.times-up {
+    animation-name: text-shining;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes text-shining {
+    0% {
+        /* visibility: hidden; */
+        opacity: 1;
+    }
+    50% {
+        /* visibility: hidden; */
+        opacity: 0.5;
+    }
+    100% {
+        /* visibility: unset; */
+        opacity: 1;
+    }
+}

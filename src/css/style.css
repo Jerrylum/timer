@@ -1,3 +1,17 @@
+/* reusable component */
+
+@import "component.css";
+
+/* themes */
+
+@import "theme.css";
+
+/* trigger by Javascript*/
+
+@import "trigger.css";
+
+/* body */
+
 html {
     height: 100%;
 }
@@ -11,213 +25,7 @@ body {
 }
 
 
-/* Trigger */
-
-.hide-optional {
-    cursor: none;
-}
-
-.hide-optional .optional {
-    display: none !important;
-}
-
-
-/* Start Theme */
-
-.dark {
-    background-color: black;
-    color: white;
-    visibility: visible;
-}
-
-.dark .dropdown-content {
-    background-color: #222;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-}
-
-.dark .dropdown-content span:hover {
-    background-color: #333;
-}
-
-.dark .disabled {
-    background-color: gray !important;
-}
-
-.dark #timer-btns>* .tooltiptext {
-    background-color: white;
-    color: black;
-}
-
-.dark #timer-btns>* .tooltiptext::after {
-    border-color: transparent transparent white transparent;
-}
-
-.dark .normal-icon:hover img {
-    filter: brightness(1.4);
-}
-
-.light {
-    background-color: white;
-    color: black;
-    visibility: visible;
-}
-
-.light .dropdown-content {
-    background-color: #DDD;
-    box-shadow: 0px 8px 16px 0px rgba(255, 255, 255, 0.2);
-}
-
-.light .dropdown-content span:hover {
-    background-color: #CCC;
-}
-
-.light .disabled {
-    background-color: #555 !important;
-}
-
-.light #timer-btns>* .tooltiptext {
-    background-color: #333;
-    color: white;
-}
-
-.light #timer-btns>* .tooltiptext::after {
-    border-color: transparent transparent #333 transparent;
-}
-
-.light .normal-icon:hover img {
-    filter: brightness(0.6);
-}
-
-
-/* Add-On */
-
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    top: 0;
-    left: 0;
-}
-
-.disabled {
-    cursor: not-allowed !important;
-}
-
-
-/* Component */
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown img {
-    position: relative;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    min-width: 100px;
-    overflow: auto;
-    z-index: 1;
-    top: 5px;
-    right: 48px;
-    border-radius: 15px;
-}
-
-.dropdown-content span {
-    padding: 10px 14px;
-    text-decoration: none;
-    display: block;
-    cursor: pointer;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.normal-icon {
-    display: block;
-    width: 48px;
-    height: 48px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.normal-icon a {
-    height: 38px;
-    width: 38px;
-    text-align: center;
-}
-
-.normal-icon img {
-    cursor: pointer;
-    max-height: 38px;
-    max-width: 38px;
-}
-
-.dark .highlight {
-    animation-name: dark-highlight;
-    animation-duration: 0.5s;
-}
-
-.light .highlight {
-    animation-name: light-highlight;
-    animation-duration: 0.5s;
-}
-
-@keyframes dark-highlight {
-    0% {
-        transform: scale(1.0);
-    }
-    50% {
-        transform: scale(1.1);
-        filter: brightness(2);
-    }
-    100% {
-        transform: unset
-    }
-}
-
-@keyframes light-highlight {
-    0% {
-        transform: scale(1.0);
-    }
-    50% {
-        transform: scale(1.1);
-        filter: brightness(0);
-    }
-    100% {
-        transform: unset
-    }
-}
-
-.times-up {
-    animation-name: text-shining;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-}
-
-@keyframes text-shining {
-    0% {
-        /* visibility: hidden; */
-        opacity: 1;
-    }
-    50% {
-        /* visibility: hidden; */
-        opacity: 0.5;
-    }
-    100% {
-        /* visibility: unset; */
-        opacity: 1;
-    }
-}
-
-
-/* By-Id */
+/* by-Id */
 
 #setting-panel {
     position: fixed;
@@ -232,24 +40,20 @@ body {
 
 #timer {
     width: 900px;
-    /* height: 400px; */
     position: relative;
 }
 
 #timer-content {
     width: 900px;
-    /* height: 440px; */
 }
 
 #timer-body {
-    /* margin-top: 40px; */
     height: 270px;
     margin-bottom: 50px;
 }
 
 #timer-value {
     font-size: 200px;
-    /* line-height: 240px; */
     display: block;
     position: absolute;
     right: 50px;
@@ -263,7 +67,6 @@ body {
     width: 230px;
     text-align: center;
     outline: none;
-    /* font-family: consolas; */
 }
 
 #msec {

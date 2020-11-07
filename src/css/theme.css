@@ -1,0 +1,99 @@
+.dark {
+    background-color: black;
+    color: white;
+    visibility: visible;
+}
+
+.dark .dropdown-content {
+    background-color: #222;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.dark .dropdown-content span:hover {
+    background-color: #333;
+}
+
+.dark .disabled {
+    background-color: gray !important;
+}
+
+.dark #timer-btns>* .tooltiptext {
+    background-color: white;
+    color: black;
+}
+
+.dark #timer-btns>* .tooltiptext::after {
+    border-color: transparent transparent white transparent;
+}
+
+.dark .normal-icon:hover img {
+    filter: brightness(1.4);
+}
+
+.dark .highlight {
+    animation-name: dark-highlight;
+    animation-duration: 0.5s;
+}
+
+@keyframes dark-highlight {
+    0% {
+        transform: scale(1.0);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(2);
+    }
+    100% {
+        transform: unset
+    }
+}
+
+.light {
+    background-color: white;
+    color: black;
+    visibility: visible;
+}
+
+.light .dropdown-content {
+    background-color: #DDD;
+    box-shadow: 0px 8px 16px 0px rgba(255, 255, 255, 0.2);
+}
+
+.light .dropdown-content span:hover {
+    background-color: #CCC;
+}
+
+.light .disabled {
+    background-color: #555 !important;
+}
+
+.light #timer-btns>* .tooltiptext {
+    background-color: #333;
+    color: white;
+}
+
+.light #timer-btns>* .tooltiptext::after {
+    border-color: transparent transparent #333 transparent;
+}
+
+.light .normal-icon:hover img {
+    filter: brightness(0.6);
+}
+
+.light .highlight {
+    animation-name: light-highlight;
+    animation-duration: 0.5s;
+}
+
+@keyframes light-highlight {
+    0% {
+        transform: scale(1.0);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(0);
+    }
+    100% {
+        transform: unset
+    }
+}
