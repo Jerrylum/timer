@@ -23,6 +23,9 @@ window.vueTimer = new Vue({
             this.t._previousTicks = Math.trunc(cookie.timer_previous_ticks) || 0;
         }
 
+        if (this.t.status == TimerStatus.TIMESUP)
+            this.t.reset();
+
         setInterval(() => {
             // HACK, manually update
             if (this.t) this.t.__ob__.dep.notify();
@@ -48,7 +51,7 @@ window.vueTimer = new Vue({
     watch: {
         't._previousTicks': function() { this.updateTimerCookie() },
         't._startTick': function() { this.updateTimerCookie() },
-        't.status': function(value) { vuePanel.sound.updateStatus(value) },
+        't': function(value) { vuePanel.updateTimer(value) },
         timeS: function() {
             document.title = `${this.timeH}:${this.timeM}:${this.timeS}`
         },
@@ -257,6 +260,10 @@ window.vueTimer = new Vue({
             return this.t instanceof CountdownTimer ?
                 this.t.status == TimerStatus.TIMESUP :
                 false;
+        },
+
+        isTimesUp: function() {
+            return this.t.status == TimerStatus.TIMESUP;
         },
 
         btn1Warning: function() {

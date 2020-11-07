@@ -22,7 +22,7 @@
     <div id="thebody" @keydown="BodyKeyDownEvent" :class="{'hide-optional': vuePanel.isHideOptional}" class="center">
         <div id="timer" :style="{'transform': vuePanel.getTimerScale()}">
             <div id="timer-content">
-                <div id="timer-body">
+                <div id="timer-body" :class="{'times-up': isTimesUp}">
                     <span id="timer-value">
                     <span id="hour" class="editable-field" v-text="timeH"></span>
                     <span>:</span>
@@ -74,7 +74,7 @@
             </div>
             <div class="normal-icon dropdown">
                 <img src="./img/sound.gif" :title="lang.sound_openned" v-show="sound.isSoundOn" width="38px">
-                <img src="./img/mute.gif" :title="lang.sound_closed" v-show="!sound.isSoundOn">
+                <img src="./img/mute.gif" :title="lang.sound_closed" v-show="!sound.isSoundOn" ref="muteIcon">
                 <div id="change-sound" class="dropdown-content">
                     <span @click="sound.isSoundOn = true">{{ lang.sound_do_open }}</span>
                     <span @click="sound.isSoundOn = false">{{ lang.sound_do_close }}</span>

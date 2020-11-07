@@ -1,6 +1,6 @@
 'use strict';
 
-const { getCookie, setCookie, SoundManager } = require('./preload');
+const { getCookie, setCookie, SoundManager, TimerStatus, CountdownTimer } = require('./preload');
 const { i18n } = require('./language');
 
 window.vuePanel = new Vue({
@@ -52,7 +52,10 @@ window.vuePanel = new Vue({
             'light'
         ],
         zoomScale: 1,
-        sound: new SoundManager()
+        sound: new SoundManager(),
+        animation: {
+            soundBtnHighlight: false
+        }
     },
     watch: {
         isHideOptional: function() {
@@ -78,6 +81,25 @@ window.vuePanel = new Vue({
     },
     computed: {},
     methods: {
+        updateTimer: function(t) {
+            this.sound.updateStatus(t.status);
+            if (t.status == TimerStatus.RUNNING && t instanceof CountdownTimer)
+                this.playSoundBtnHighlight();
+            else
+                this.animation.soundBtnHighlight = false;
+        },
+
+        playSoundBtnHighlight: function() {
+            if (!this.animation.soundBtnHighlight) {
+                this.animation.soundBtnHighlight = true;
+
+                this.$refs.muteIcon.classList.add('highlight');
+                setTimeout(() => {
+                    this.$refs.muteIcon.classList.remove('highlight');
+                }, 1000);
+            }
+        },
+
         openFullscreen: function() {
             var elem = document.documentElement;
             if (elem.requestFullscreen) {
