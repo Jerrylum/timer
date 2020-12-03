@@ -13,6 +13,8 @@ In order to change the hour, minute, second, or millisecond, you can press one o
 - You can modify the time when the timer is paused
 - Multiple color themes and languages
 - Hide the timer buttons
+- Enlarge the numbers of the timer and switch to full screen
+- Time's up notification sound
 - The timer status can be restored (Using Cookie)
 - Compatible with different browsers, as low as IE 11
 - No ads, that's important
