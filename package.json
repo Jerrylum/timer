@@ -1,6 +1,6 @@
 {
   "name": "jerrytimer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "No ads, an online timer created by Jerrylum, better than online-stopwatch.com",
   "main": "compile.js",
   "scripts": {
@@ -37,3 +37,4 @@
     "webpack": "^5.3.2"
   }
 }
+

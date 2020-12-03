@@ -14,7 +14,7 @@
 
 Jerry Timer is a simple countdown timer and stopwatch using Vue. This timer is designed for examinations, quizzes, and everything that requires a timer. You can hide the timer buttons (which is very cool), or change the theme, or download the repository and change anything you want to.
 
-In order to support computers running on Windows XP in the school, I used Babel to convert the Javascript code into a backwards compatible version, as low as IE 11.
+In order to support computers running on Windows XP in the school, I used Babel to convert the Javascript code into a backwards compatible version, as low as IE 11. Taking into account the horrible WiFi at school, Terser and Webpack were used to compress the code size and combine multiple source code files into one.
 
 Jerry Timer also supports multiple languages. I translated the timer into traditional Chinese and English. The user can switch to another language without having to reload the page.
 
